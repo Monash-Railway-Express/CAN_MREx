@@ -1,0 +1,4 @@
+pyinstaller --onefile --windowed --clean --icon=favicon.ico --add-data "favicon.ico;." MRExUltraNodeTool.py
+
+
+can skip --clean if only changing simple code
