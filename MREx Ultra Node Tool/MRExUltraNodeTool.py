@@ -34,11 +34,13 @@ class TrainProgrammer(QWidget):
         self.brake_tab = self.create_brake_tab()
         self.autostop_tab = self.create_autostop_tab()
         self.regen_tab = self.create_regen_tab()
+        self.custom_send = self.custom_send_tab()
 
         self.tabs.addTab(self.traction_profiles_tab, "Traction profiles")
         self.tabs.addTab(self.brake_tab, "Brakes")
         self.tabs.addTab(self.autostop_tab, "Autostop Challenge")
         self.tabs.addTab(self.regen_tab, "Regenerative Braking Challenge")
+        self.tabs.addTab(self.custom_send, "Send Custom message")
         layout.addWidget(self.tabs)
 
         # Serial port selection
@@ -130,6 +132,26 @@ class TrainProgrammer(QWidget):
         self.controller_mode = QComboBox()
         self.controller_mode.addItems(["Manual", "Auto", "Diagnostic"])
         grid.addWidget(self.controller_mode, 0, 1)
+
+        tab.setLayout(grid)
+        return tab
+    
+    def custom_send_tab(self):
+        tab = QWidget()
+        grid = QGridLayout()
+
+        grid.addWidget(QLabel("Node: "), 0, 0)
+        self.node = QLineEdit()
+        grid.addWidget(self.node, 0,1)
+
+        grid.addWidget(QLabel("Read/write: "), 1, 0)
+        self.controller_mode = QComboBox()
+        self.controller_mode.addItems(["Read", "Write"])
+        grid.addWidget(self.controller_mode, 1, 1)
+
+        grid.addWidget(QLabel("Data: "), 2, 0)
+        self.data = QLineEdit()
+        grid.addWidget(self.data, 2,1)
 
         tab.setLayout(grid)
         return tab
