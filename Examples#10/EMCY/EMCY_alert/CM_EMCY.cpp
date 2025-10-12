@@ -38,7 +38,10 @@ void sendEMCY(uint8_t priority, uint8_t nodeID, uint32_t errorCode){
 
   // Transmit SDO request
   if (twai_transmit(&txMsg, pdMS_TO_TICKS(100)) != ESP_OK) {
-    Serial.println("Failed to send SDO request");
-  return; 
+    // Try once more
+    if (twai_transmit(&txMsg, pdMS_TO_TICKS(100)) != ESP_OK) {
+      Serial.println("EMCY transmission failed twice");
+      return;
+    }
   }
 }

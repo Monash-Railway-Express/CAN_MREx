@@ -1,16 +1,38 @@
+/**
+ * CAN Logger file 
+ *
+ * File:            CAN_logger.ino
+ * Organisation:    MREX
+ * Author:          Chiara Gillam
+ * Date Created:    12/10/2025
+ * Last Modified:   12/10/2025
+ * Version:         1.10.1
+ *
+ */
+
+
+
+// Libraries used:
+// https://wiki.dfrobot.com/DS3231M%20MEMS%20Precise%20RTC%20SKU:%20DFR0641
+
+
+
 #include <SPI.h>
 #include <SD.h>
 #include <Wire.h>
-#include "DFRobot_DS3231M.h"
 #include "driver/twai.h"
+#include "DFRobot_DS3231M.h"
 
-const int SD_CS = 10; // chip select pin
-DFRobot_DS3231M rtc; // rtc object
-File logFile; // logfile
-String logFilename; // filename
+// RTC
+DFRobot_DS3231M rtc;
 
-// Ring buffer config and instantiate
-const int BUFFER_SIZE = 64;
+// SD card
+const int SD_CS = 26;
+File logFile;
+String logFilename;
+
+// Ring buffer config
+const int BUFFER_SIZE = 32;
 struct CANFrame {
   String timestamp;
   uint32_t id;
@@ -21,53 +43,35 @@ CANFrame buffer[BUFFER_SIZE];
 int bufferIndex = 0;
 unsigned long lastFlush = 0;
 
-//flush buffer function
-void flushBuffer() {
-  for (int i = 0; i < bufferIndex; i++) {
-    logFile.print(buffer[i].timestamp);
-    logFile.print(",0x");
-    logFile.print(buffer[i].id, HEX);
-    logFile.print(",");
-    logFile.print(buffer[i].dlc);
-    for (int j = 0; j < 8; j++) {
-      logFile.print(",");
-      if (j < buffer[i].dlc) {
-        logFile.print("0x");
-        logFile.print(buffer[i].data[j], HEX);
-      }
-    }
-    logFile.println();
-  }
-  logFile.flush();
-  bufferIndex = 0;
-  lastFlush = millis();
-}
-
 void setup() {
   Serial.begin(115200);
   Wire.begin();
 
   // RTC init
-  if (!rtc.begin()) {
-    Serial.println("RTC not found");
-    while (1);
+  while(rtc.begin() != true){
+    Serial.println("Failed to init chip, please check if the chip connection is fine. ");
+    delay(1000);
   }
 
-  //create file for logging to
-  rtc.getNowTime();
-  logFilename = "CAN_" +
-                String(rtc.day()) + "-" +
-                String(rtc.month()) + "-" +
-                String(rtc.year()) + "_" +
-                String(rtc.hour()) + "-" +
-                String(rtc.minute()) + "-" +
-                String(rtc.second()) + ".csv";
-
-  // SD init
+    // SD init
   if (!SD.begin(SD_CS)) {
     Serial.println("SD init failed");
     while (1);
   }
+
+  // File name init
+  int testNumber = 0;
+  char filename[13]; // 8.3 format: "/YYMMDDNN.CSV"
+  bool fileExists = true;
+
+  rtc.getNowTime();
+  do {
+    sprintf(filename, "/%02d%02d%02d%02d.CSV", rtc.year() % 100, rtc.month(), rtc.day(), testNumber);
+    fileExists = SD.exists(filename);
+    if (fileExists) testNumber++;
+  } while (fileExists && testNumber < 100); // Limit to 00–99
+
+  logFilename = String(filename);
 
   // Open log file and write header
   logFile = SD.open(logFilename, FILE_WRITE);
@@ -88,14 +92,14 @@ void setup() {
     Serial.println("CAN init failed");
     while (1);
   }
-
   Serial.println("CAN logging started");
 }
 
 void loop() {
   twai_message_t message;
-  if (twai_receive(&message, pdMS_TO_TICKS(5)) == ESP_OK) {
+  if (twai_receive(&message, pdMS_TO_TICKS(10)) == ESP_OK) {
     rtc.getNowTime();
+
     CANFrame frame;
     frame.timestamp = String(rtc.year()) + "-" +
                       String(rtc.month()) + "-" +
@@ -103,6 +107,10 @@ void loop() {
                       String(rtc.hour()) + ":" +
                       String(rtc.minute()) + ":" +
                       String(rtc.second());
+
+    // // Fallback timestamp using millis
+    // frame.timestamp = String(millis());
+
     frame.id = message.identifier;
     frame.dlc = message.data_length_code;
     for (int i = 0; i < 8; i++) {
@@ -118,7 +126,28 @@ void loop() {
   }
 
   // Periodic flush
-  if (millis() - lastFlush > 1000 && bufferIndex > 0) {
+  if (millis() - lastFlush > 500 && bufferIndex > 0) {
     flushBuffer();
   }
+}
+
+void flushBuffer() {
+  for (int i = 0; i < bufferIndex; i++) {
+    logFile.print(buffer[i].timestamp);
+    logFile.print(",0x");
+    logFile.print(buffer[i].id, HEX);
+    logFile.print(",");
+    logFile.print(buffer[i].dlc);
+    for (int j = 0; j < 8; j++) {
+      logFile.print(",");
+      if (j < buffer[i].dlc) {
+        logFile.print("0x");
+        logFile.print(buffer[i].data[j], HEX);
+      }
+    }
+    logFile.println();
+  }
+  logFile.flush();
+  bufferIndex = 0;
+  lastFlush = millis();
 }

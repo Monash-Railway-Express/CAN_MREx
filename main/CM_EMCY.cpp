@@ -6,7 +6,7 @@
  * Author:          Chiara Gillam
  * Date Created:    12/09/2025
  * Last Modified:   13/09/2025
- * Version:         1.10.1
+ * Version:         1.10.2
  *
  */
 
@@ -35,6 +35,9 @@ void sendEMCY(uint8_t priority, uint8_t nodeID, uint32_t errorCode){
   txMsg.data[3] = (errorCode >> 8) & 0xFF;
   txMsg.data[4] = (errorCode >> 16) & 0xFF;
   txMsg.data[5] = (errorCode >> 24) & 0xFF;
+
+  // Set to stopped state if EMCY
+  if (priority == 0x00) nodeOperatingMode = 0x02;
 
   // Transmit SDO request
   if (twai_transmit(&txMsg, pdMS_TO_TICKS(100)) != ESP_OK) {

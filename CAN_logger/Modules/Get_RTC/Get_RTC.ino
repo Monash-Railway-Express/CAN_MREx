@@ -17,7 +17,7 @@
     
     void setup(void)
     {
-        Serial.begin(9600);
+        Serial.begin(115200);
         /*Wait for the chip to be initialized completely, and then exit*/
         while(rtc.begin() != true){
             Serial.println("Failed to init chip, please check if the chip connection is fine. ");
@@ -45,19 +45,19 @@
          *@brief Set the last compiled time as the current time
          */
         //rtc.dateTime();//If users use this function, please don't set time by other way
-        rtc.setYear(19);//Set year, default in the 21st century, input negative number for years in the 20th century.
-        rtc.setMonth(10);
-        rtc.setDate(23);
-        /*!
-         *@brief Set the hours and 12hours or 24hours
-         *@param hour:1-12 in 12hours,0-23 in 24hours
-         *@param mode:e24hours, eAM, ePM
-         */
-        rtc.setHour(0,e24hours);
-        rtc.setMinute(59);
-        rtc.setSecond(40);
+        // rtc.setYear(19);//Set year, default in the 21st century, input negative number for years in the 20th century.
+        // rtc.setMonth(10);
+        // rtc.setDate(23);
+        // /*!
+        //  *@brief Set the hours and 12hours or 24hours
+        //  *@param hour:1-12 in 12hours,0-23 in 24hours
+        //  *@param mode:e24hours, eAM, ePM
+        //  */
+        // rtc.setHour(0,e24hours);
+        // rtc.setMinute(59);
+        // rtc.setSecond(40);
         
-        rtc.adjust();
+        // rtc.adjust();
     
         /*!
          *@brief enable the 32k output (default is enable)

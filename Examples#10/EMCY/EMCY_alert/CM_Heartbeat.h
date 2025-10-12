@@ -6,7 +6,7 @@
  * Author:          Chiara Gillam
  * Date Created:    12/09/2025
  * Last Modified:   30/09/2025
- * Version:         1.10.1
+ * Version:         1.10.2
  */
 
 #ifndef CM_HEARTBEAT_H
@@ -15,7 +15,7 @@
 #include <Arduino.h>
 #include "driver/twai.h"
 
-#define MAX_NODES 8  // Adjust based on your network size
+#define MAX_NODES 16  // Adjust based on your network size
 
 typedef struct {
   uint8_t hbOperatingMode;

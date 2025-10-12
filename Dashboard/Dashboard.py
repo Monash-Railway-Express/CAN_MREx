@@ -9,7 +9,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 logs_dir = os.path.join(script_dir, "Logs")
 
 # List CSV files inside Logs
-csv_files = [f for f in os.listdir(logs_dir) if f.endswith('.csv')][::-1]
+csv_files = [f for f in os.listdir(logs_dir) if f.lower().endswith('.csv')][::-1]
 
 external_stylesheets = [
     {

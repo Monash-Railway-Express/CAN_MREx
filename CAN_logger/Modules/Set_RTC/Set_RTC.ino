@@ -17,14 +17,14 @@
     
     DFRobot_DS3231M rtc;
     
-    const char* ssid       = "dfrobotYanfa";//wlan information
-    const char* password   = "hidfrobot";
+    const char* ssid       = "Nincom poop backroom";//wlan information
+    const char* password   = "3de496d4";
     
     const char* ntpServer = "ntp.ntsc.ac.cn";//local ntp server
     const long  gmtOffset_sec = 10*3600;  //GMT+10:00
     const int   daylightOffset_sec = 3600; //Daylight savings
-    
-    
+
+
     void getTimeFromNTP()
     {
         struct tm timeinfo;
@@ -43,9 +43,8 @@
         
     }
     
-    void setup()
-    {
-        Serial.begin(9600);
+    void setup(){   
+        Serial.begin(115200);
         while(rtc.begin() != true){
             Serial.println("Failed to init chip, please check if the chip connection is fine. ");
             delay(1000);

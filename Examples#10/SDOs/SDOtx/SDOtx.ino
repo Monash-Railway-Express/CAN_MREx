@@ -86,7 +86,7 @@ void loop() {
       
 
       // Read heartbeat interval from node 2 (index 0x1017, subindex 0x00)
-      executeSDORead(nodeID, 2, 0x1017, 0x00, &heartbeatNode2);
+      executeSDORead(nodeID, 2, 0x1017, 0x00, &heartbeatNode2);// Node ID, targeted node, index, subindex, variable to return to 
 
       Serial.print("Heartbeat from node 2 Received: ");
       Serial.print(heartbeatNode2);

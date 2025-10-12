@@ -27,7 +27,7 @@ uint8_t brake = 0;
 
 //OPTIONAL: timing for a non blocking function occuring every two seconds
 unsigned long previousMillis = 0;
-const long interval = 2000; // 2 seconds
+const long interval = 10; // 1 second
 
 // User code end ---------------------------------------------------------
 
@@ -47,7 +47,7 @@ void setup() {
 
 
   // --- Register TPDOs ---
-  configureTPDO(0, 0x180 + nodeID, 255, 100, 1000);  // COB-ID, transType, inhibit, event
+  configureTPDO(0, 0x180 + nodeID, 255, 10, 10);  // COB-ID, transType, inhibit, event
   
   PdoMapEntry tpdoEntries[] = {
       {0x2000, 0x01, 16},  // Example: index 0x2000, subindex 1, 16 bits

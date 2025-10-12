@@ -185,4 +185,3 @@ void waitSDOResponse(uint32_t* outValue, uint8_t targetNodeID, uint8_t nodeID){
   sendEMCY(0x00, nodeID, 0x00000008); // SDO response not received 
   
 }
-// TODO: add a counter to ensure it tries multiple times and an error if it fails.
