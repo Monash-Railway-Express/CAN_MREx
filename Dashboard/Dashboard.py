@@ -20,22 +20,30 @@ external_stylesheets = [
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.title = "CAN Bus Dashboard"
-
 app.layout = html.Div(
     children=[
-        # Header
+        # Header with image on the left
         html.Div(
             children=[
-                html.H1("CAN Bus Dashboard", className="header-title"),
-                html.P(
-                    "Explore CAN messages over time and analyze",
-                    className="header-description",
+                html.Img(
+                    src="/assets/MREx_logo.png",
+                    className="header-image"
+                ),
+                html.Div(
+                    children=[
+                        html.H1("CAN Bus Dashboard", className="header-title"),
+                        html.P(
+                            "Explore CAN messages over time and analyze",
+                            className="header-description",
+                        ),
+                    ],
+                    className="header-text"
                 ),
             ],
-            className="header",
+            className="header-container"
         ),
 
-        # File selector menu (centered)
+        # File selector menu
         html.Div(
             children=[
                 html.Div("Select CSV File", className="menu-title"),
@@ -59,7 +67,7 @@ app.layout = html.Div(
             className="selector",
         ),
 
-        # Time range slider 1
+        # Time range slider
         html.Div(
             children=[
                 html.Div("Select Time Range", className="menu-title"),
@@ -120,11 +128,9 @@ app.layout = html.Div(
             ],
             className="graph-row",
         ),
-
     ],
     className="page-container",
 )
-
 
 # --- Callbacks ---
 

@@ -10,13 +10,29 @@ body {
   padding-right: 0px;
 }
 
-/* Header */
-.header {
-  text-align: center;
+/* Header container with image and text side-by-side */
+.header-container {
+  display: flex;
+  align-items: center;
   padding: 20px;
   background-color: #7f3f98;
 }
 
+/* Image styling */
+.header-image {
+  width: 80px; /* Adjust size as needed */
+  height: auto;
+  margin-right: 20px;
+}
+
+/* Text block next to the image */
+.header-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Title and description */
 .header-title {
   font-size: 36px;
   margin-bottom: 5px;
@@ -27,6 +43,7 @@ body {
   color: #fff;
   margin-top: 0;
 }
+
 
 /* File selector menu centered */
 .file-menu {
