@@ -15,6 +15,7 @@ The CAN bus is the standard framework for transmitting data mostly used in the a
 
 ## Data Frame Break down
 ![image1](assets/image1.png)
+
 **SOF**: The Start of Frame is a ‘dominant 0’ to tell the other nodes that a CAN node intends to talk.
 
 **ID**: The ID is the frame identifier and in CAN MREX it is known as the **COB-ID**. It is used to specify what the message means, and who’s sending it. The ID also defines the priority: the lower the ID, the higher the message’s priority.
@@ -82,6 +83,7 @@ Nodes must be set up in one long daisy chain. They will be connected by a twiste
 ## Connectors and Cabling 
 
 ![](assets/image3.png) 
+
 [This link](https://docs.google.com/document/d/1z_m1jUXGCUGbTQQ1tjzIbztrTMvj-k5NUkE4eM-gYQw/edit?tab=t.0#heading=h.aarlihveemr) provides a deeper insight
 
 ## Node Overview
