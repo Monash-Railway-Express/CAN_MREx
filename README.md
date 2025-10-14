@@ -14,7 +14,7 @@ CAN MREX is a Can protocol that is intended to adhere to most of the CAN open pr
 The CAN bus is the standard framework for transmitting data mostly used in the automotive and industrial/manufacturing industries. CAN MREX is built on top of this standard.
 
 ## Data Frame Break down
-![image1][assets/image1.png]  
+![image1](assets/image1.png)
 **SOF**: The Start of Frame is a ‘dominant 0’ to tell the other nodes that a CAN node intends to talk.
 
 **ID**: The ID is the frame identifier and in CAN MREX it is known as the **COB-ID**. It is used to specify what the message means, and who’s sending it. The ID also defines the priority: the lower the ID, the higher the message’s priority.
@@ -74,13 +74,14 @@ This is a SDO request sent to node 2 \[0x600 \+ node ID\] , requesting 1 byte of
 
 # Physical CAN Network
 
-## Node setup![][assets/image2]
+## Node setup
+![](assets/image2.png)
 
 Nodes must be set up in one long daisy chain. They will be connected by a twisted pair shielded cable. They will also be terminated at each end of the chain with a 120ohm resistor to prevent deflection.
 
 ## Connectors and Cabling 
 
-![][assets/image3]  
+![](assets/image3.png) 
 [This link](https://docs.google.com/document/d/1z_m1jUXGCUGbTQQ1tjzIbztrTMvj-k5NUkE4eM-gYQw/edit?tab=t.0#heading=h.aarlihveemr) provides a deeper insight
 
 ## Node Overview
@@ -108,19 +109,19 @@ The main controller is set as the NMT controller. This node will start in the �
 
 In order to use CAN MREX you will be pulling the CAN MREX github repository and building your projects within a copy of the MAIN folder.  
 [https://github.com/Monash-Railway-Express/CAN\_MREx](https://github.com/Monash-Railway-Express/CAN_MREx)   
-![][assets/image4]  
+![](assets/image4.png) 
 You should be able to do everything you need to do within the main.ino file. I would suggest renaming this file to your own project file name along with the copied main folder.
 
 CAN MREx has been designed so that when there are updates to the software your main.ino file will not need to change. All you'll need to do is drop all the new files and you're good to go.
 
-# ![][assets/image5]
+![](assets/image5.png)
 
 All code you can configure/ change will be within User code begin and User code end areas.  
 In this documentation we will go through functions you can call to use functionalities of CAN MREX such as the one below:  
   registerODEntry(0x2000, 0x01, 2, sizeof(uint16\_t), \&speed);
 
 **Please make sure that when you’re writing code for CAN bus that you write non blocking code for ease of implementation.**  
-**![][assets/image6]**  
+![](assets/image6.png) 
 This is an example where we only update the brakes every 100ms so that the CANhandler can run as much as possible and so we’re not wasting cycles on checking if the state has changed.
 
 **Also please make sure you are using uint8\_t, uint16\_t and unit32\_t for variables cause the can bus only accepts unsigned ints. Talk to me if you’re worried about this.**
@@ -140,10 +141,10 @@ The index and subindex are essentially the address of the variable. Permission a
 ## Example set up:
 
 1. Initialise variables you want in the object dictionary. They must be of byte size 1, 2 or 4\. (unint8\_t, unint16\_t, unint32\_t). This allows you to access the variables normally in your program.  Ensure they are unsigned integers\!\!\! Talk to me if you want to use floats or negative numbers we can work something out.   
-   ![][assets/image7]  
+![](assets/image7.png)
 2. Register the OD entries using the above table to help identify what variables you need to pass to the function.
 
-![][assets/image8]
+![](assets/image8.png)
 
 ## Object Dictionary lookup 
 
@@ -199,7 +200,7 @@ This stuff is mostly abstracted away.
 ### Example set up:
 
 **SDO write request**  
-**![][assets/image9]**
+![](assets/image9.png)
 
 | Node ID | Targeted node | Index | Subindex | Value | Size of value |
 | :---- | :---- | :---- | :---- | :---- | :---- |
@@ -210,13 +211,13 @@ Implement abort codes for debugging.
 
 **SDO read request**
 
-**![][assets/image10]**
+![](assets/image10.png)
 
 | Node ID | Targeted node | Index | Subindex | Out Value |
 | :---- | :---- | :---- | :---- | :---- |
 | Own node id | The node you want to write to | The index in the targeted nodes OD you want to write to  | The subindex | The value you will receive into Warning\! It will always be a uint32 if you want it to be of a different size you will have to typecast |
 
-**![][assets/image11]**  
+![](assets/image11.png) 
 Since it always returns a 32 bit value you will need to typecast it to have it in the format you want. You must put it into a temporary value before typecasting it as otherwise you can cause memory leaks and undefined behaviour.
 
 **SDO Confirmations/responses**  
@@ -286,16 +287,16 @@ Don’t forget that the maximum amount of bytes allowed in one data transfer is 
 ## Example set up:
 
 **TPDO set up**  
-![][assets/image12]  
+![](assets/image12.png)
 In this example we have mapped TPDO1 to send from COB ID 181 (Its node 1). It is sending the values from index 0x2000, 0x01 and 0x2001, 0x00 in the object dictionary. It is set up to send every 1000ms with an inhibit of 100ms. 
 
 CAN MREX will automatically send the values in your object dictionary as long as handleCAN() function is continuously being polled. It will also only send the data if it’s changed values which frees up the can network.
 
 If you don’t want to send it with a 1000ms timer you could also have it so that it sends when you want it to using the markTpdoDirty(pdonum) Function. You pass the TPDO number you want to mark as dirty and next time the handleCAN() function is called. You can also have both a timer and the marktpdo dirty function working together. This is where the inhibit timer could come in handy.   
-![][assets/image13]This corresponds to TPDO 1
+![](assets/image13.png)This corresponds to TPDO 1
 
 **RPDO set up**  
-![][assets/image14]  
+![](assets/image14.png) 
 In this example you can see that we have configured RPDO1 to receive from COB ID 0x181 asynchronously and without inhibiting how often it receives that message. We then set up the Map entry so that we have two OD entries being mapped to this RPDO (brake and speed).  We then officially map the entry with mapRPDO mapping RPDO1 to two values in the OD.  
 CAN MREX will automatically receive and update the values in your object dictionary as long as handleCAN() function is continuously being polled.
 
@@ -317,11 +318,12 @@ High priority message on the bus. This means nodes will react to this message be
 | 0x81 | Reset node |
 | 0x82 | Reset communication (not implemented) |
 
-![][assets/image15]
+![](assets/image15.png)
 
 ## Example set up:
 
-![][assets/image16]Command, Node ID
+![](assets/image16.png)
+Command, Node ID
 
 ## Heartbeat  {#heartbeat}
 
