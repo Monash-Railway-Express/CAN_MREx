@@ -14,8 +14,7 @@ CAN MREX is a Can protocol that is intended to adhere to most of the CAN open pr
 The CAN bus is the standard framework for transmitting data mostly used in the automotive and industrial/manufacturing industries. CAN MREX is built on top of this standard.
 
 ## Data Frame Break down
-
-![][image1]  
+![image1][image1]  
 **SOF**: The Start of Frame is a ‘dominant 0’ to tell the other nodes that a CAN node intends to talk.
 
 **ID**: The ID is the frame identifier and in CAN MREX it is known as the **COB-ID**. It is used to specify what the message means, and who’s sending it. The ID also defines the priority: the lower the ID, the higher the message’s priority.
@@ -45,7 +44,6 @@ Everything sent on the can bus will adhere to one of the following function meth
 | Function | Purpose |
 | ----- | ----- |
 | [**NMT (Network Management)**](#nmt) | Controls node states (e.g. Operational, Preoperational, Stopped). Sent by the **Node manager** to manage other nodes. |
-| **SYNC \- Not implemented** | Synchronizes actions across nodes. Often triggers PDO transmission.  |
 | [**EMCY (Emergency)**](#emcy) | Broadcasts fault conditions instantly. Used for fast error reporting. |
 | [**TPDO (Transmit)**](#pdos) | Sends real-time process data (e.g. sensor values, target speed) from node to bus. Use this for data we want to monitor constantly. |
 | **RPDO (Receive)** | Receives process data (e.g. actuator commands) from bus to node. It will look out for specified TPDOs and take that from the bus into the node. |
@@ -55,7 +53,6 @@ Everything sent on the can bus will adhere to one of the following function meth
 | Function | Function Code (Hex) | COB-ID Formula | COB-ID Range |
 | ----- | ----- | ----- | ----- |
 | NMT | 0x000 | Fixed | 0x000 |
-| SYNC | 0x080 | Fixed | 0x080 |
 | EMCY | 0x081 | 0x080 \+ Node ID | 0x081–0x0FF |
 | TPDO1 | 0x180 | 0x180 \+ Node ID | 0x180–0x1FF |
 | RPDO1 | 0x200 | 0x200 \+ Node ID | 0x200–0x27F |
@@ -73,13 +70,13 @@ Everything sent on the can bus will adhere to one of the following function meth
 | :---- | :---- |
 | \[0x602\] | \[2F 01 00 00 01 00 00 00\] |
 
-This is a SDO request sent to node 2 \[0x600 \+ node ID\] , requesting 1 byte of data be sent \[2F\] to index 0x0001 \[01 00\]  subindex 0x00 \[00\]. The data being sent is simply the number one \[01 00 00 00\]. (This is further explained in SDO section)
+This is a SDO request sent to node 2 \[0x600 \+ node ID\] , requesting 1 byte of data be sent \[2F\] to index 0x0001 \[01 00\]  subindex 0x00 \[00\]. The data being sent is simply the number one \[01 00 00 00\]. (This is further explained in SDO section) You won't have to worry about little endian coding, the function's you'll be using will do this all for you.
 
 # Physical CAN Network
 
 ## Node setup![][image2]
 
-Nodes must be set up in one long daisy chain. They will be connected by a twisted pair shielded cable.
+Nodes must be set up in one long daisy chain. They will be connected by a twisted pair shielded cable. They will also be terminated at each end of the chain with a 120ohm resistor to prevent deflection.
 
 ## Connectors and Cabling 
 
@@ -98,14 +95,14 @@ The timing will be 500kb/s
 We will be using the standard 11 bit identifiers  
 Bitrate and timing configuration?
 
-## Boot up protocol
-
-(you may need to read the rest of this document to understand this bit)  
-The main controller is set as the NMT controller. This node will start in the “not operational” state and wait for a switch/ push button to be pressed to start initialization. It will then set each node in the network to pre operational state. Each node will do a self check and ensure that everything is okay. If everything is okay, a button will be pushed to put everything into the operational state. From here the train will function fully.
-
 ## Operating modes
 
-These are changed by the NMT controller. There are three main operating modes. **Stopped** means the node is stopped and in a safety mode. Often you assert all your variables and controls into a safe position (motor off, brakes on etc.). The node cannot send or receive anything other than a message from the NMT controller or its heartbeat. Next is **preoperational** which is still a “safe mode” however in this mode things in the object dictionary can be changed over SDOs. PDOs are still not active. The last mode is **Operational** in which you can do everything the node would usually do.
+These are changed by the NMT controller. There are three main operating modes. **Stopped** means the node is stopped and in a safety mode. All variables and controls  will be set into a safe position (motor off, brakes on etc.). The node cannot send or receive anything other than a message from the NMT controller or its heartbeat. Next is **preoperational** which is still a “safe mode” however in this mode things in the object dictionary can be changed over SDOs. PDOs are still not active. The last mode is **Operational** in which you can do everything the node would usually do.
+
+## Boot up protocol
+
+The main controller is set as the NMT controller. This node will start in the “not operational” state and wait for a switch/ push button to be pressed to start initialization. It will then set each node in the network to pre operational state. Each node will do a self check and ensure that everything is okay. If everything is okay, a button will be pushed to put everything into the operational state. From here the train will function fully.
+
 
 # Software
 
