@@ -14,7 +14,7 @@ CAN MREX is a Can protocol that is intended to adhere to most of the CAN open pr
 The CAN bus is the standard framework for transmitting data mostly used in the automotive and industrial/manufacturing industries. CAN MREX is built on top of this standard.
 
 ## Data Frame Break down
-![image1][assets/image1]  
+![image1][assets/image1.png]  
 **SOF**: The Start of Frame is a ‘dominant 0’ to tell the other nodes that a CAN node intends to talk.
 
 **ID**: The ID is the frame identifier and in CAN MREX it is known as the **COB-ID**. It is used to specify what the message means, and who’s sending it. The ID also defines the priority: the lower the ID, the higher the message’s priority.
