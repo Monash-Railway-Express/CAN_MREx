@@ -5,8 +5,8 @@
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    18/08/2025
- * Last Modified:   8/09/2025
- * Version:         1.10.1
+ * Last Modified:   15/10/2025
+ * Version:         1.11.0
  *
  */
 
@@ -47,12 +47,12 @@ struct TpdoState {
 void initDefaultPDOs(uint8_t nodeID);
 
 // Call in loop
-void processRPDO(const twai_message_t& rx);
+void processRPDO(const twai_message_t& rx, uint8_t nodeID);  // now includes nodeID
 void serviceTPDOs(uint8_t nodeID);  // handles periodic/event-driven sends
 
 // Helpers
-bool packTPDO(uint8_t pdoNum, uint8_t* outBytes, uint8_t* outLen);
-bool unpackRPDO(uint8_t pdoNum, const uint8_t* data, uint8_t len);
+bool packTPDO(uint8_t nodeID, uint8_t pdoNum, uint8_t* outBytes, uint8_t* outLen);  // now includes nodeID
+bool unpackRPDO(uint8_t nodeID, uint8_t pdoNum, const uint8_t* data, uint8_t len);  // now includes nodeID
 
 // Optional: expose a simple API to trigger event-driven sends on change
 void markTpdoDirty(uint8_t pdoNum);
@@ -60,6 +60,7 @@ void markTpdoDirty(uint8_t pdoNum);
 // Communication setup
 void configureTPDO(uint8_t pdoNum, uint32_t cobID, uint8_t transType, uint16_t inhibitMs, uint16_t eventMs);
 void configureRPDO(uint8_t pdoNum, uint32_t cobID, uint8_t transType, uint16_t inhibitMs);
+
 
 // Mapping setup
 bool mapTPDO(uint8_t pdoNum, const PdoMapEntry* entries, uint8_t count);
