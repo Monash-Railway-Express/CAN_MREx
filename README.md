@@ -1,6 +1,6 @@
 # CAN MREX
 
-CAN MREX is a Can protocol that is intended to adhere to most of the CAN open protocols however customised for the use of MREX
+CAN MREX is a CAN wrapper that is intended to adhere to most of the CAN open standards however it is especially designed for use on the MREx locomotive
 
 ## Helpful resources:
 
