@@ -5,8 +5,8 @@
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    5/08/2025
- * Last Modified:   1/10/2025
- * Version:         Main Update #10
+ * Last Modified:   20/10/2025
+ * Version:         1.11.0
  *
  */
 
@@ -62,6 +62,7 @@ void setup() {
 
 void loop() {
   //User Code begin loop() ----------------------------------------------------
+  Serial.println(nodeOperatingMode);
   // --- Stopped mode (This is default starting point) ---
   if (nodeOperatingMode == 0x02){ 
     handleCAN(nodeID);
@@ -80,6 +81,7 @@ void loop() {
       ledState = !ledState;
       digitalWrite(led, ledState ? HIGH : LOW);
     }
+
   }
 
   // --- Operational state (Normal operating mode) ---

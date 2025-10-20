@@ -6,7 +6,7 @@
  * Author:          Chiara Gillam
  * Date Created:    12/09/2025
  * Last Modified:   30/09/2025
- * Version:         1.10.2
+ * Version:         1.11.0
  */
 
 
@@ -53,7 +53,6 @@ void checkHeartbeatTimeouts() {
 
   for (uint8_t i = 0; i < MAX_NODES; i++) {
     if (heartbeatTable[i].lastHeartbeat > 0 && currentMs - heartbeatTable[i].lastHeartbeat > heartbeatTimeout) {
-      nodeOperatingMode = 0x02;
       sendEMCY(0x00, i, 0x00000101);
     }
   }

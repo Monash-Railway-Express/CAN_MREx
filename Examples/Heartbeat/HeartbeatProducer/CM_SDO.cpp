@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * CAN MREX SDOs file 
  *
@@ -5,8 +6,8 @@
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    30/09/2025
- * Last Modified:   30/09/2025
- * Version:         1.10.1
+ * Last Modified:   15/10/2025
+ * Version:         1.11.0
  *
  */
 
@@ -39,9 +40,11 @@ void handleSDO(const twai_message_t& rxMsg, uint8_t nodeID) {
   //lookup OD entry
   ODEntry* entry = findODEntry(index, subindex);
   if (entry == nullptr) {
-    sendEMCY(0x01, nodeID, 0x00000001); // Can't find OD entry
+    Serial.println("Error 0x00000001: OD entry not found");
+    sendEMCY(0x01, nodeID, 0x00000001);
     return;
   }
+
 
   if (cmd == 0x40) { // --- Read request ---
     // Set correct response command byte based on size
@@ -49,11 +52,14 @@ void handleSDO(const twai_message_t& rxMsg, uint8_t nodeID) {
       case 1: txMsg.data[0] = 0x4F; break;
       case 2: txMsg.data[0] = 0x4B; break;
       case 4: txMsg.data[0] = 0x43; break;
-      default: sendEMCY(0x01, nodeID, 0x00000002); return; // Object dictionary not configured properly
+      default:
+        Serial.println("Error 0x00000002: OD entry size unsupported");
+        sendEMCY(0x01, nodeID, 0x00000002);
+        return;
     }
 
     memcpy(&txMsg.data[4], entry->dataPtr, entry->size);
-  } 
+  }
 
   else {  // --- write request ---
     // Determine expected write size from command byte
@@ -62,7 +68,10 @@ void handleSDO(const twai_message_t& rxMsg, uint8_t nodeID) {
       case 0x2F: expectedSize = 1; break;
       case 0x2B: expectedSize = 2; break;
       case 0x23: expectedSize = 4; break;
-      default: sendEMCY(0x01, nodeID, 0x00000003); return; // Unexpected error
+      default:
+        Serial.println("Error 0x00000003: Unexpected SDO write command");
+        sendEMCY(0x01, nodeID, 0x00000003);
+        return;
     }
 
     //Copy into the OD
@@ -70,29 +79,33 @@ void handleSDO(const twai_message_t& rxMsg, uint8_t nodeID) {
       memcpy(entry->dataPtr, &rxMsg.data[4], expectedSize);
       txMsg.data[0] = 0x60; // Write confirmation
     } else {
-      sendEMCY(0x01, nodeID, 0x00000004); // SDO message and OD do not match up
-      return; // Abort transmission
+      Serial.println("Error 0x00000004: SDO size mismatch with OD entry");
+      sendEMCY(0x01, nodeID, 0x00000004);
+      return;
     }
   }
 
   // Send the response 
   if (twai_transmit(&txMsg, pdMS_TO_TICKS(10)) != ESP_OK) {
-    sendEMCY(0x01, nodeID, 0x00000005); // Message failed to send
+    Serial.println("Error 0x00000005: Failed to transmit SDO response");
+    sendEMCY(0x01, nodeID, 0x00000005);
   }
 }
 
 
 
-void executeSDOWrite(uint8_t nodeID, uint8_t targetNodeID, uint16_t index, uint8_t subindex,  const void* value, size_t size) {
+void executeSDOWrite(uint8_t nodeID, uint8_t targetNodeID, uint16_t index, uint8_t subindex, size_t size, const void* value) {
   uint8_t sdoBuf[8];
   uint8_t cmd;
+
 
   switch (size) {
     case 1: cmd = 0x2F; break;
     case 2: cmd = 0x2B; break;
     case 4: cmd = 0x23; break;
     default:
-      sendEMCY(0x01, nodeID, 0x00000006); // Object size is wrong
+      Serial.println("Error 0x00000006: Invalid object size in executeSDOWrite");
+      sendEMCY(0x01, nodeID, 0x00000006);
       return;
   }
 
@@ -100,13 +113,15 @@ void executeSDOWrite(uint8_t nodeID, uint8_t targetNodeID, uint16_t index, uint8
   transmitSDO(nodeID, targetNodeID, sdoBuf, nullptr);
 }
 
-void executeSDORead(uint8_t nodeID, uint8_t targetNodeID, uint16_t index, uint8_t subindex, uint32_t* outValue) {
+uint32_t executeSDORead(uint8_t nodeID, uint8_t targetNodeID, uint16_t index, uint8_t subindex) {
   uint8_t sdoBuf[8];
   uint8_t cmd = 0x40;
+  uint32_t outValue = 0;
   
 
   prepareSDOTransmit(cmd, index, subindex, nullptr, 0, sdoBuf);
-  transmitSDO(nodeID, targetNodeID, sdoBuf, outValue);
+  transmitSDO(nodeID, targetNodeID, sdoBuf, &outValue);
+  return outValue;
 }
 
 //used to prepare the message being sent over SDO
@@ -133,9 +148,11 @@ void transmitSDO(uint8_t nodeID, uint8_t targetNodeID, uint8_t* data, uint32_t* 
 
   // Transmit SDO request
   if (twai_transmit(&msg, pdMS_TO_TICKS(10)) != ESP_OK) {
-    sendEMCY(0x01, nodeID, 0x00000007); // Failed to send SDO request
+    Serial.println("Error 0x00000007: Failed to transmit SDO request");
+    sendEMCY(0x01, nodeID, 0x00000007);
     return;
   }
+
   waitSDOResponse(outValue, targetNodeID, nodeID);
 }
 
@@ -152,8 +169,9 @@ void waitSDOResponse(uint32_t* outValue, uint8_t targetNodeID, uint8_t nodeID){
 
       if (cmd == 0x60) return; // SDO Confirmed
 
-      if (cmd == 0x80) { // SDO abort
-        sendEMCY(0x01, nodeID, 0x00000009); // SDO Abort received
+      if (cmd == 0x80) {
+        Serial.println("Error 0x00000009: SDO Abort received");
+        sendEMCY(0x01, nodeID, 0x00000009);
         return;
       }
 
@@ -174,7 +192,9 @@ void waitSDOResponse(uint32_t* outValue, uint8_t targetNodeID, uint8_t nodeID){
       }
 
       sendEMCY(0x01, nodeID, 0x0000000A); // Unexpected SDO CMD received in response
+      Serial.println("Error 0x0000000A: Unexpected SDO command in response");
       return;
+
 
 
     } else{ // handle messages that aren't the response 
@@ -182,7 +202,7 @@ void waitSDOResponse(uint32_t* outValue, uint8_t targetNodeID, uint8_t nodeID){
     }
   }
 
-  sendEMCY(0x00, nodeID, 0x00000008); // SDO response not received 
-  
+  sendEMCY(0x00, nodeID, 0x00000008); // SDO response not received
+  Serial.println("Error 0x00000008: SDO response timeout");
+
 }
-// TODO: add a counter to ensure it tries multiple times and an error if it fails.

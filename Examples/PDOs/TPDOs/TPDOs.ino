@@ -5,7 +5,7 @@
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    1/10/2025
- * Last Modified:   15/10/2025
+ * Last Modified:   20/10/2025
  * Version:         1.11.0
  *
  */
@@ -27,7 +27,7 @@ uint8_t brake = 0;
 
 //OPTIONAL: timing for a non blocking function occuring every two seconds
 unsigned long previousMillis = 0;
-const long interval = 10; // 1 second
+const long interval = 1000; // 1 second
 
 // User code end ---------------------------------------------------------
 

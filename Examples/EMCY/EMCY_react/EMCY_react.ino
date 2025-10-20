@@ -6,7 +6,7 @@
  * Author:          Chiara Gillam
  * Date Created:    13/09/2025
  * Last Modified:   30/09/2025
- * Version:         Main Update #10
+ * Version:         1.11.0
  *
  */
 
@@ -60,7 +60,7 @@ void loop() {
   if (nodeOperatingMode == 0x02){ 
     handleCAN(nodeID);
     digitalWrite(led, HIGH);
-    Serial.println("Off state")
+    Serial.println("Off state");
   }
 
   // --- Pre operational state (This is where you can do checks and make sure that everything is okay) ---
@@ -72,6 +72,7 @@ void loop() {
   if (nodeOperatingMode == 0x01){ 
     handleCAN(nodeID);
     digitalWrite(led, LOW);
+    Serial.println("On state");
   }
 
   //User code end loop() --------------------------------------------------------

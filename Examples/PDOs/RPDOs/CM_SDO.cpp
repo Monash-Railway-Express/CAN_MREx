@@ -108,8 +108,8 @@ uint32_t executeSDORead(uint8_t nodeID, uint8_t targetNodeID, uint16_t index, ui
   
 
   prepareSDOTransmit(cmd, index, subindex, nullptr, 0, sdoBuf);
-  transmitSDO(nodeID, targetNodeID, sdoBuf, outValue);
-  return outValue
+  transmitSDO(nodeID, targetNodeID, sdoBuf, &outValue);
+  return outValue;
 }
 
 //used to prepare the message being sent over SDO

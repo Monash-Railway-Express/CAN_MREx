@@ -5,7 +5,7 @@
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    1/10/2025
- * Last Modified:   15/10/2025
+ * Last Modified:   20/10/2025
  * Version:         1.11.0
  *
  */
@@ -42,8 +42,8 @@ void setup() {
 
   // User code Setup Begin: -------------------------------------------------
   // --- Register OD entries ---
-  registerODEntry(0x2000, 0x01, 2, sizeof(uint16_t), &speed);
-  registerODEntry(0x2001, 0x00, 2, sizeof(uint8_t), &brake); 
+  registerODEntry(0x2000, 0x01, 2, sizeof(speed), &speed);
+  registerODEntry(0x2001, 0x00, 2, sizeof(brake), &brake); 
 
   // --- Register TPDOs ---
   

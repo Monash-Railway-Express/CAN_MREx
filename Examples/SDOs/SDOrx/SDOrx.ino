@@ -5,8 +5,8 @@
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    5/08/2025
- * Last Modified:   1/10/2025
- * Version:         1.10.2
+ * Last Modified:   20/10/2025
+ * Version:         1.11.0
  *
  */
 
@@ -42,6 +42,7 @@ void setup() {
   // User code Setup Begin: -------------------------------------------------
   // --- Register OD entries ---
   registerODEntry(0x0001, 0x00, 2, sizeof(mode), &mode);
+  //Heartbeat interval is already automatically registered
 
   // --- Register TPDOs ---
   

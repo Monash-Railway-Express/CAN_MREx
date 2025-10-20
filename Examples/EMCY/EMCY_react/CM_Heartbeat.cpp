@@ -6,12 +6,13 @@
  * Author:          Chiara Gillam
  * Date Created:    12/09/2025
  * Last Modified:   30/09/2025
- * Version:         1.10.1
+ * Version:         1.11.0
  */
 
 
 #include "CM_Heartbeat.h"
 #include "CM_ObjectDictionary.h"
+#include "CM_EMCY.h"
 
 nodeHeartbeat heartbeatTable[MAX_NODES];
 
@@ -41,7 +42,6 @@ void receiveHeartbeat(const twai_message_t& rxMsg) {
     heartbeatTable[nodeIndex].hbOperatingMode = rxMsg.data[0];
     heartbeatTable[nodeIndex].lastHeartbeat = millis();
   }
-  Serial.println("heartbeat Received");
 }
 
 void checkHeartbeatTimeouts() {
@@ -52,11 +52,8 @@ void checkHeartbeatTimeouts() {
   lastCheckTime = currentMs;
 
   for (uint8_t i = 0; i < MAX_NODES; i++) {
-    if (heartbeatTable[i].lastHeartbeat > 0 &&
-        currentMs - heartbeatTable[i].lastHeartbeat > heartbeatTimeout) {
-      Serial.print("ERROR: Node ");
-      Serial.print(i);
-      Serial.println(" heartbeat timeout!");
+    if (heartbeatTable[i].lastHeartbeat > 0 && currentMs - heartbeatTable[i].lastHeartbeat > heartbeatTimeout) {
+      sendEMCY(0x00, i, 0x00000101);
     }
   }
 }

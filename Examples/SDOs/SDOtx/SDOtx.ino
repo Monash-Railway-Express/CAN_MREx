@@ -5,8 +5,8 @@
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    5/08/2025
- * Last Modified:   1/10/2025
- * Version:         1.10.2
+ * Last Modified:   20/10/2025
+ * Version:         1.11.0
  *
  */
 
@@ -76,8 +76,8 @@ void loop() {
     if (currentMillis - previousMillis >= interval) {
       previousMillis = currentMillis;
 
-      // Write mode to node 2 (Speed in the dictionary)
-      executeSDOWrite(nodeID, 2, 0x0001, 0x00, &mode, sizeof(mode));// Node ID, targeted node, index, subindex, value, size of value
+      // Write mode to (index 0x0001, subindex 0x00) in node 2
+      executeSDOWrite(nodeID, 2, 0x0001, 0x00, sizeof(mode), &mode);// Node ID, targeted node, index, subindex, value, size of value
 
       Serial.print("Mode transmitted: ");
       Serial.print(mode);
@@ -86,7 +86,7 @@ void loop() {
       
 
       // Read heartbeat interval from node 2 (index 0x1017, subindex 0x00)
-      executeSDORead(nodeID, 2, 0x1017, 0x00, &heartbeatNode2);// Node ID, targeted node, index, subindex, variable to return to 
+      heartbeatNode2 = executeSDORead(nodeID, 2, 0x1017, 0x00);// Node ID, targeted node, index, subindex
 
       Serial.print("Heartbeat from node 2 Received: ");
       Serial.print(heartbeatNode2);
