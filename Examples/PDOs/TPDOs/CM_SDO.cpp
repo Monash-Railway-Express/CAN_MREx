@@ -1,3 +1,4 @@
+#include <stdint.h>
 /**
  * CAN MREX SDOs file 
  *
@@ -5,8 +6,8 @@
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    30/09/2025
- * Last Modified:   30/09/2025
- * Version:         1.10.1
+ * Last Modified:   15/10/2025
+ * Version:         1.11.0
  *
  */
 
@@ -100,13 +101,15 @@ void executeSDOWrite(uint8_t nodeID, uint8_t targetNodeID, uint16_t index, uint8
   transmitSDO(nodeID, targetNodeID, sdoBuf, nullptr);
 }
 
-void executeSDORead(uint8_t nodeID, uint8_t targetNodeID, uint16_t index, uint8_t subindex, uint32_t* outValue) {
+uint32_t executeSDORead(uint8_t nodeID, uint8_t targetNodeID, uint16_t index, uint8_t subindex) {
   uint8_t sdoBuf[8];
   uint8_t cmd = 0x40;
+  uint32_t outValue = 0;
   
 
   prepareSDOTransmit(cmd, index, subindex, nullptr, 0, sdoBuf);
   transmitSDO(nodeID, targetNodeID, sdoBuf, outValue);
+  return outValue
 }
 
 //used to prepare the message being sent over SDO
@@ -185,4 +188,3 @@ void waitSDOResponse(uint32_t* outValue, uint8_t targetNodeID, uint8_t nodeID){
   sendEMCY(0x00, nodeID, 0x00000008); // SDO response not received 
   
 }
-// TODO: add a counter to ensure it tries multiple times and an error if it fails.

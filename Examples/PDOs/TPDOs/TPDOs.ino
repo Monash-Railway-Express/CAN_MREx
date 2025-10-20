@@ -5,8 +5,8 @@
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    1/10/2025
- * Last Modified:   1/10/2025
- * Version:         Main Update #10
+ * Last Modified:   15/10/2025
+ * Version:         1.11.0
  *
  */
 
@@ -42,8 +42,8 @@ void setup() {
 
   // User code Setup Begin: -------------------------------------------------
   // --- Register OD entries ---
-  registerODEntry(0x2000, 0x01, 2, sizeof(uint16_t), &speed);
-  registerODEntry(0x2001, 0x00, 2, sizeof(uint8_t), &brake);
+  registerODEntry(0x2000, 0x01, 2, sizeof(speed), &speed);
+  registerODEntry(0x2001, 0x00, 2, sizeof(brake), &brake);
 
 
   // --- Register TPDOs ---
@@ -53,6 +53,7 @@ void setup() {
       {0x2000, 0x01, 16},  // Example: index 0x2000, subindex 1, 16 bits
       {0x2001, 0x00, 8}    // Example: index 0x2001, subindex 0, 8 bits
     };
+  
   mapTPDO(0, tpdoEntries, 2); //TPDO 1, entries, num entries
 
   // --- Register RPDOs ---

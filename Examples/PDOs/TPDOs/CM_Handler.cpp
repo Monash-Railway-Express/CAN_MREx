@@ -5,8 +5,8 @@
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    6/08/2025
- * Last Modified:   12/09/2025
- * Version:         1.10.2
+ * Last Modified:   15/10/2025
+ * Version:         1.11.0
  *
  */
 
@@ -42,12 +42,12 @@ void handleCAN(uint8_t nodeID, twai_message_t* pdoMsg) {
     handleNMT(rxMsg, nodeID);
     return;
   } 
-  else if (canID == 0x081) { // Emergency messages (always processed)
+  else if (canID >= 0x081 && canID <= 0x0FF) { // Emergency messages (always processed)
     handleEMCY(rxMsg, nodeID);
     return;
   } 
   else if ((canID >= 0x180 && canID <= 0x57F) && nodeOperatingMode == 0x01) { // RPDOs (only in operational state)
-    processRPDO(rxMsg);
+    processRPDO(rxMsg, nodeID);
     return;
   } 
   else if (canID == 0x600 + nodeID && (nodeOperatingMode == 0x01 || nodeOperatingMode == 0x80)) {
