@@ -130,6 +130,7 @@ In this documentation we will go through functions you can call to use functiona
    registerODEntry(0x2000, 0x01, 2, sizeof(uint16\_t), \&speed);
 
 **Please make sure that when you’re writing code for CAN bus that you write non blocking code for ease of implementation.**  
+
 ![](assets/image6.png) 
 
 This is an example where we only update the brakes every 100ms so that the CANhandler can run as much as possible and so we’re not wasting cycles on checking if the state has changed.
@@ -144,13 +145,13 @@ Below is the basic structure of the object dictionary
 
 | Index | Subindex | Permissions | Size | Data |
 | :---- | :---- | :---- | :---- | :---- |
-| 2 byte value e.g 0x1000 | 1 byte value  e.g 0x01 | 0 \= Read only, 1 \= Write only,  2 \= Read Write | Size of data being stored (should usually be less than 8 bytes) | Where the data is stored |
+| 2 byte value e.g 0x1000 | 1 byte value  e.g 0x01 | 0 \= Read only, 1 \= Write only,  2 \= Read Write | Size of data being stored (should be less than or equal to 8 bytes) | Where the data is stored |
 
 The index and subindex are essentially the address of the variable. Permission allows us to protect certain variables. Size ensures there’s no lost or corrupted data.
 
 ## Example set up:
 
-1. Initialise variables you want in the object dictionary. They must be of byte size 1, 2 or 4\. (unint8\_t, unint16\_t, unint32\_t). This allows you to access the variables normally in your program.  Ensure they are unsigned integers\!\!\! Talk to me if you want to use floats or negative numbers we can work something out.   
+1. Initialise variables you want in the object dictionary. They must be of byte size 1, 2 or 4. (uint8\_t, uint16\_t, uint32\_t). This allows you to access the variables normally in your program.  Ensure they are unsigned integers\!\!\! Talk to me if you want to use floats or negative numbers we can work something out.   
 ![](assets/image7.png)
 2. Register the OD entries using the above table to help identify what variables you need to pass to the function.
 
