@@ -112,18 +112,18 @@ void loop() {
 
     // Decision logic
     if(desiredSpeed > 10 && regenBrake <= 10){
-      motorpwmValue = desiredSpeed >> 4;
+      motorpwmValue = desiredSpeed >> 2;
       brakepwmValue = 0;
       serviceBrake = 0;
     }
     else if(desiredSpeed > 10 && regenBrake > 10){
       motorpwmValue = 0;
-      brakepwmValue = regenBrake >> 4;
+      brakepwmValue = regenBrake >> 2;
       serviceBrake = 0;
     }
     else if(desiredSpeed <= 10 && regenBrake > 10){
       motorpwmValue = 0;
-      brakepwmValue = regenBrake >> 4;
+      brakepwmValue = regenBrake >> 2;
       serviceBrake = 1;
     }
     else{
