@@ -42,8 +42,8 @@ void setup() {
 
   // User code Setup Begin: -------------------------------------------------
   // --- Register OD entries ---
-  registerODEntry(0x2000, 0x01, 2, sizeof(speed), &speed);
-  registerODEntry(0x2001, 0x00, 2, sizeof(brake), &brake);
+  registerODEntry(0x2000, 0x01, 2, sizeof(speed), &speed); // Index, Subindex, Read Write access, Size, Data
+  registerODEntry(0x2001, 0x00, 2, sizeof(brake), &brake); // Index, Subindex, Read Write access, Size, Data
 
 
   // --- Register TPDOs ---
