@@ -3,7 +3,7 @@
 CAN MREX is a CAN wrapper that is intended to adhere to most of the CAN open standards however it is specifically designed for use on the MREx locomotive
 
 ## Also see
-[MREx Ultra Node Tool](https://github.com/Monash-Railway-Express/MREx_Ultra_Node_Tool) - A tool to program nodes and changes variables mid operation from a gui on a computer
+[MREx Ultra Node Tool](https://github.com/Monash-Railway-Express/MREx_Ultra_Node_Tool) - A tool to program nodes and change variables mid operation from a gui on a computer
 
 [MREx Dashboard](https://github.com/Monash-Railway-Express/MREx_Dashboard) - A dashboard to view recorded data from the can bus for analysis.
 
