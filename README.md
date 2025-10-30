@@ -153,20 +153,17 @@ The index and subindex are essentially the address of the variable. Permission a
 
 1. Initialise variables you want in the object dictionary. They must be of byte size 1, 2 or 4. (uint8\_t, uint16\_t, uint32\_t). This allows you to access the variables normally in your program.  Ensure they are unsigned integers\!\!\! Talk to me if you want to use floats or negative numbers we can work something out.   
 ![](assets/image7.png)
-2. Register the OD entries using the above table to help identify what variables you need to pass to the function.
+2. Register the OD entries using the above table to help identify what variables you need to pass to the function. Do this in the setup
 
 ![](assets/image8.png)
 
 ## Object Dictionary lookup 
 
-[**6040h**](https://www.google.com/search?client=firefox-b-d&sca_esv=61d4dbf66945b305&cs=1&sxsrf=AE3TifNi2rmb0DXtiGkHjBCJK7G-N4kUYg%3A1757488584072&q=6040h&sa=X&ved=2ahUKEwinn-CV082PAxUHRWcHHfP3HIsQxccNegQIJBAB&mstk=AUtExfC8MGLxKdHUKfA2R1e2hFQ05TqAS7NhkUj1e94q3DFvg98YZ3Wv9jabduf0QWxrfSHQL5QU1wIZYQpidF5UERWp4_qiZAiuo5KrZHoPKpEbj0jRp-_7m-Vjrc1nD1WTU7PauBXXinpsRkTFGJFCHZFfeOYIEfU3ETmP0VY6IkS6-MdxYX098Lf1mqPa_mPmMHqjUlmhuVn0Mm6Q5ePhiTcAvkJU3pkBzTilj7BhaLu8bJS90OTtkVuAusL_3N9dS0vxbm67-jCy_uthU9ShyURyI05htT9bV8xJUnZMPM3aPA&csui=3)**: Controlword**: Used to control the operational state of the drive.  
-[**6041h**](https://www.google.com/search?client=firefox-b-d&sca_esv=61d4dbf66945b305&cs=1&sxsrf=AE3TifNi2rmb0DXtiGkHjBCJK7G-N4kUYg%3A1757488584072&q=6041h&sa=X&ved=2ahUKEwinn-CV082PAxUHRWcHHfP3HIsQxccNegQIJhAB&mstk=AUtExfC8MGLxKdHUKfA2R1e2hFQ05TqAS7NhkUj1e94q3DFvg98YZ3Wv9jabduf0QWxrfSHQL5QU1wIZYQpidF5UERWp4_qiZAiuo5KrZHoPKpEbj0jRp-_7m-Vjrc1nD1WTU7PauBXXinpsRkTFGJFCHZFfeOYIEfU3ETmP0VY6IkS6-MdxYX098Lf1mqPa_mPmMHqjUlmhuVn0Mm6Q5ePhiTcAvkJU3pkBzTilj7BhaLu8bJS90OTtkVuAusL_3N9dS0vxbm67-jCy_uthU9ShyURyI05htT9bV8xJUnZMPM3aPA&csui=3)**: Statusword**: Provides information about the current status of the drive.  
-[**6060h**](https://www.google.com/search?client=firefox-b-d&sca_esv=61d4dbf66945b305&cs=1&sxsrf=AE3TifNi2rmb0DXtiGkHjBCJK7G-N4kUYg%3A1757488584072&q=6060h&sa=X&ved=2ahUKEwinn-CV082PAxUHRWcHHfP3HIsQxccNegQIJRAB&mstk=AUtExfC8MGLxKdHUKfA2R1e2hFQ05TqAS7NhkUj1e94q3DFvg98YZ3Wv9jabduf0QWxrfSHQL5QU1wIZYQpidF5UERWp4_qiZAiuo5KrZHoPKpEbj0jRp-_7m-Vjrc1nD1WTU7PauBXXinpsRkTFGJFCHZFfeOYIEfU3ETmP0VY6IkS6-MdxYX098Lf1mqPa_mPmMHqjUlmhuVn0Mm6Q5ePhiTcAvkJU3pkBzTilj7BhaLu8bJS90OTtkVuAusL_3N9dS0vxbm67-jCy_uthU9ShyURyI05htT9bV8xJUnZMPM3aPA&csui=3)**: Modes of operation**: Defines the current operating mode of the motor drive.  
-[**6064h**](https://www.google.com/search?client=firefox-b-d&sca_esv=61d4dbf66945b305&cs=1&sxsrf=AE3TifNi2rmb0DXtiGkHjBCJK7G-N4kUYg%3A1757488584072&q=6064h&sa=X&ved=2ahUKEwinn-CV082PAxUHRWcHHfP3HIsQxccNegQIKhAB&mstk=AUtExfC8MGLxKdHUKfA2R1e2hFQ05TqAS7NhkUj1e94q3DFvg98YZ3Wv9jabduf0QWxrfSHQL5QU1wIZYQpidF5UERWp4_qiZAiuo5KrZHoPKpEbj0jRp-_7m-Vjrc1nD1WTU7PauBXXinpsRkTFGJFCHZFfeOYIEfU3ETmP0VY6IkS6-MdxYX098Lf1mqPa_mPmMHqjUlmhuVn0Mm6Q5ePhiTcAvkJU3pkBzTilj7BhaLu8bJS90OTtkVuAusL_3N9dS0vxbm67-jCy_uthU9ShyURyI05htT9bV8xJUnZMPM3aPA&csui=3)**: Position actual value**: Reads the actual position of the motor.  
-[**607Ah**](https://www.google.com/search?client=firefox-b-d&sca_esv=61d4dbf66945b305&cs=1&sxsrf=AE3TifNi2rmb0DXtiGkHjBCJK7G-N4kUYg%3A1757488584072&q=607Ah&sa=X&ved=2ahUKEwinn-CV082PAxUHRWcHHfP3HIsQxccNegQIKxAB&mstk=AUtExfC8MGLxKdHUKfA2R1e2hFQ05TqAS7NhkUj1e94q3DFvg98YZ3Wv9jabduf0QWxrfSHQL5QU1wIZYQpidF5UERWp4_qiZAiuo5KrZHoPKpEbj0jRp-_7m-Vjrc1nD1WTU7PauBXXinpsRkTFGJFCHZFfeOYIEfU3ETmP0VY6IkS6-MdxYX098Lf1mqPa_mPmMHqjUlmhuVn0Mm6Q5ePhiTcAvkJU3pkBzTilj7BhaLu8bJS90OTtkVuAusL_3N9dS0vxbm67-jCy_uthU9ShyURyI05htT9bV8xJUnZMPM3aPA&csui=3)**: Target position**: Used to set the target position of the motor.  
-[**60FFh**](https://www.google.com/search?client=firefox-b-d&sca_esv=61d4dbf66945b305&cs=1&sxsrf=AE3TifNi2rmb0DXtiGkHjBCJK7G-N4kUYg%3A1757488584072&q=60FFh&sa=X&ved=2ahUKEwinn-CV082PAxUHRWcHHfP3HIsQxccNegQIKRAB&mstk=AUtExfC8MGLxKdHUKfA2R1e2hFQ05TqAS7NhkUj1e94q3DFvg98YZ3Wv9jabduf0QWxrfSHQL5QU1wIZYQpidF5UERWp4_qiZAiuo5KrZHoPKpEbj0jRp-_7m-Vjrc1nD1WTU7PauBXXinpsRkTFGJFCHZFfeOYIEfU3ETmP0VY6IkS6-MdxYX098Lf1mqPa_mPmMHqjUlmhuVn0Mm6Q5ePhiTcAvkJU3pkBzTilj7BhaLu8bJS90OTtkVuAusL_3N9dS0vxbm67-jCy_uthU9ShyURyI05htT9bV8xJUnZMPM3aPA&csui=3)**: Target velocity**: Used to set the target velocity of the motor.  
-Add here link to excel  
-[https://docs.myostat.ca/cm1-e/user-guide/object-dictionary\#ObjectDictionary-0x606C:Speedactualvalue](https://docs.myostat.ca/cm1-e/user-guide/object-dictionary#ObjectDictionary-0x606C:Speedactualvalue) 
+[This](https://docs.google.com/spreadsheets/d/1OaXG5B06xnvpNkGQIkrtbM_n-pCCqvnd99yezD7YYoQ/edit?gid=1912354743#gid=1912354743) is the link to the object dictionary look up. If you want make a new object dictionary entry please put it in here first and under any nodes that use it.
+
+If you need inspiration for what index to use for your varaibles this could be helpful:
+
+[Myostat](https://docs.myostat.ca/cm1-e/user-guide/object-dictionary#ObjectDictionary-0x606C:Speedactualvalue) 
 
 # Transmit types
 
@@ -177,11 +174,9 @@ Add here link to excel
 It can be described as a **Client-server model**  
 An SDO request is sent out to a specific node. It can either ask to change a value in that node’s object dictionary or ask to know what value is stored at a certain address (index, subindex). That node will then either confirm that it updated its value, return what was at the address requested or cause an error.
 
-I want to implement retries.
-
 ### Data format
 
-This stuff is mostly abstracted away.
+This stuff is mostly abstracted away but could be worth reading.
 
 | Byte | Purpose |
 | ----- | ----- |
@@ -224,21 +219,20 @@ Implement abort codes for debugging.
 
 ![](assets/image10.png)
 
-| Node ID | Targeted node | Index | Subindex | Out Value |
-| :---- | :---- | :---- | :---- | :---- |
-| Own node id | The node you want to write to | The index in the targeted nodes OD you want to write to  | The subindex | The value you will receive into Warning\! It will always be a uint32 if you want it to be of a different size you will have to typecast |
+| Node ID | Targeted node | Index | Subindex |
+| :---- | :---- | :---- | :---- |
+| Own node id | The node you want to write to | The index in the targeted nodes OD you want to write to  | The subindex |
 
-![](assets/image11.png) 
+![](assets/image11.png)
+
 Since it always returns a 32 bit value you will need to typecast it to have it in the format you want. You must put it into a temporary value before typecasting it as otherwise you can cause memory leaks and undefined behaviour.
 
 **SDO Confirmations/responses**  
 The receiving node will automatically update its Object dictionary and confirm this when it receives an SDO write request. It will also automatically send back its data from an SDO read request. You do not need to do anything to receive this function as long as the handleCAN() function is repeatedly polled. 
 
-## PDOs {#pdos}
+## PDOs
 
-**Purpose**: High‑speed, real‑time data transfer in CANopen with no extra protocol overhead.  
-**Link to Application**: Each PDO corresponds to entries in the Object Dictionary. This mapping defines the data type, size, and position of each application variable inside a PDO frame.  
-**Two Roles:**  
+**Purpose**: High‑speed, real‑time data transfer with no extra protocol overhead.
 TPDO – Transmit PDO: node acts as a producer (sends data).  
 RPDO – Receive PDO: node acts as a consumer (receives data).  
 **Descriptors**:  
@@ -258,9 +252,9 @@ The PDO is mapped at the start of your program. TPDOs tell CAN MREX to send data
 
 Each node has 4 RPDOs and 4 TPDOs
 
-COB ID ranges for TPDOS and RPDOS
+COB ID ranges for TPDOS and RPDOS are seen at the start of the document
 
-## Tables
+### Tables
 
 ### Configure TPDO
 
@@ -295,23 +289,29 @@ COB ID ranges for TPDOS and RPDOS
 
 Don’t forget that the maximum amount of bytes allowed in one data transfer is 8 bytes so keep that in mind when creating this struct.
 
-## Example set up:
+### Example set up:
 
 **TPDO set up**  
 ![](assets/image12.png)
+
 In this example we have mapped TPDO1 to send from COB ID 181 (Its node 1). It is sending the values from index 0x2000, 0x01 and 0x2001, 0x00 in the object dictionary. It is set up to send every 1000ms with an inhibit of 100ms. 
 
 CAN MREX will automatically send the values in your object dictionary as long as handleCAN() function is continuously being polled. It will also only send the data if it’s changed values which frees up the can network.
 
-If you don’t want to send it with a 1000ms timer you could also have it so that it sends when you want it to using the markTpdoDirty(pdonum) Function. You pass the TPDO number you want to mark as dirty and next time the handleCAN() function is called. You can also have both a timer and the marktpdo dirty function working together. This is where the inhibit timer could come in handy.   
-![](assets/image13.png)This corresponds to TPDO 1
+If you don’t want to send it with a 1000ms timer you could also have it so that it sends when you want it to using the markTpdoDirty(pdonum) Function. You pass the TPDO number you want to mark as dirty and next time the handleCAN() function is called. You can also have both a timer and the marktpdo dirty function working together. This is where the inhibit timer could come in handy.  
+
+![](assets/image13.png)
+
+This corresponds to TPDO 1
 
 **RPDO set up**  
+
 ![](assets/image14.png) 
+
 In this example you can see that we have configured RPDO1 to receive from COB ID 0x181 asynchronously and without inhibiting how often it receives that message. We then set up the Map entry so that we have two OD entries being mapped to this RPDO (brake and speed).  We then officially map the entry with mapRPDO mapping RPDO1 to two values in the OD.  
 CAN MREX will automatically receive and update the values in your object dictionary as long as handleCAN() function is continuously being polled.
 
-## NMT {#nmt}
+## NMT 
 
 All nodes in the network will be controlled by a node deemed the “NMT Controller” This helps with process flow. The NMT Controller will control what state each node is in. There are three states that a node can be in. 0x02 is the stopped state. All nodes except the NMT controller will start in this state. The NMT controller can then send signals to change each node to whatever state is needed at any time.   
 High priority message on the bus. This means nodes will react to this message before anything else.
@@ -331,24 +331,27 @@ High priority message on the bus. This means nodes will react to this message be
 
 ![](assets/image15.png)
 
-## Example set up:
+### Example set up:
 
 ![](assets/image16.png)
+
 Command, Node ID
 
 ## Heartbeat  {#heartbeat}
 
-Node status monitoring  
-Heartbeat producer/consumer setup  
-Timing and timeout handling
+Heartbeats will be sent out automatically by every node every second. A single node will double as the heartbeat consumer and will keep track of whether nodes are alive.
 
 | Byte | Purpose |
 | ----- | ----- |
 | 0 | Node state (e.g., operational, pre-operational) |
 
-## EMCY {#emcy}
+## EMCY (0x80)
 
-Fast error reporting as it is a high priority message on the bus. This means nodes will react to this message before anything else.
+Emergency messages are crucial on our lovomotice. There is fast error reporting as it is a high priority message on the bus. This means nodes will react to this message before anything else.
+
+### Sending an emergency message:
+
+![](assets/image17.png)
 
 | Byte | Purpose |
 | ----- | ----- |
@@ -366,27 +369,13 @@ Byte 1 of the error code corresponds to what type of error it is and the rest is
 | 0x02 | Brake fault |
 | 0x03 | Battery fault |
 
-### Errors 
 
-- Bus overflowing  
-- Corrupted data 
-
-**Minor and major faults**   
-Minor faults will simply end up as a message on the can bus (maybe have a system connected with controller to display)  
+### Minor and major faults
+Minor faults will simply end up as a message on the can bus and will be displayed on the screen. After a ceratin amount of minor faults (currently 10) a major fault will be triggered.
 Major faults will cause an emergency stop.
 
-# 
 
 # Testing process
 
 The can bus should be tested in an isolated environment on a test bench to ensure all commands and functionalities are correct and filtering is working as intended.
 
-## 
-
-# 
-
-# Debugging
-
-- Overflow of messages to a node  
-- Overflow of bus   
-- 
