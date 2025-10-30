@@ -1,6 +1,6 @@
 # CAN MREX
 
-CAN MREX is a CAN wrapper that is intended to adhere to most of the CAN open standards however it is especially designed for use on the MREx locomotive
+CAN MREX is a CAN wrapper that is intended to adhere to most of the CAN open standards however it is specifically designed for use on the MREx locomotive
 
 ## Helpful resources:
 
@@ -11,7 +11,7 @@ CAN MREX is a CAN wrapper that is intended to adhere to most of the CAN open sta
 
 ## CAN bus
 
-The CAN bus is the standard framework for transmitting data mostly used in the automotive and industrial/manufacturing industries. CAN MREX is built on top of this standard.
+The CAN bus is a standard framework for transmitting data mostly used in the automotive and industrial/manufacturing industries. CAN MREX is built on top of this standard.
 
 ## Data Frame Break down
 ![image1](assets/image1.png)
@@ -36,7 +36,7 @@ The CAN bus is the standard framework for transmitting data mostly used in the a
 
 ## Nodes
 
-Each microcontroller that's connected to the CAN bus is called a node. Most of the communication between different nodes requires their node IDs. It’s how we send things addressed to specific nodes and how we listen out for signals specific nodes are sending.
+Each microcontroller that's connected to the CAN bus is called a node. Each node has it's own node ID. Most of the communication between different nodes requires their node IDs. It’s how we send things addressed to specific nodes and how we listen out for signals specific nodes are sending.
 
 ## IDs, COB-IDs and Functions
 
@@ -44,13 +44,14 @@ Everything sent on the can bus will adhere to one of the following function meth
 
 | Function | Purpose |
 | ----- | ----- |
-| [**NMT (Network Management)**](#nmt) | Controls node states (e.g. Operational, Preoperational, Stopped). Sent by the **Node manager** to manage other nodes. |
-| [**EMCY (Emergency)**](#emcy) | Broadcasts fault conditions instantly. Used for fast error reporting. |
-| [**TPDO (Transmit)**](#pdos) | Sends real-time process data (e.g. sensor values, target speed) from node to bus. Use this for data we want to monitor constantly. |
-| **RPDO (Receive)** | Receives process data (e.g. actuator commands) from bus to node. It will look out for specified TPDOs and take that from the bus into the node. |
-| [**SDO**](#sdos) | Sends structured data (e.g. config parameters) from node to another with a confirmation (Client server model). Can also request data from another node. |
-| [**Heartbeat / Node Guarding**](#heartbeat) | Monitors node presence and status. Detects if a node goes offline or fails. |
+| [**NMT (Network Management)**](nmt) | Controls node states (e.g. Operational, Preoperational, Stopped). Sent by the **Node manager** to manage other nodes. |
+| [**EMCY (Emergency)**](emcy) | Broadcasts fault conditions instantly. Used for fast error reporting. |
+| [**TPDO (Transmit)**](pdos) | Sends real-time process data (e.g. sensor values, target speed) from node to bus. Use this for data we want to monitor constantly. |
+| [**RPDO (Receive)**](pdos) | Receives process data (e.g. actuator commands) from bus to node. It will look out for specified TPDOs and take that from the bus into the node. |
+| [**SDO**](sdos) | Sends structured data (e.g. config parameters) from node to another with a confirmation (Client server model). Can also request data from another node. |
+| [**Heartbeat / Node Guarding**](heartbeat) | Monitors node presence and status. Detects if a node goes offline or fails. |
 
+The ID of the message follows the following rules:
 | Function | Function Code (Hex) | COB-ID Formula | COB-ID Range |
 | ----- | ----- | ----- | ----- |
 | NMT | 0x000 | Fixed | 0x000 |
@@ -59,6 +60,10 @@ Everything sent on the can bus will adhere to one of the following function meth
 | RPDO1 | 0x200 | 0x200 \+ Node ID | 0x200–0x27F |
 | TPDO2 | 0x280 | 0x280 \+ Node ID | 0x280–0x2FF |
 | RPDO2 | 0x300 | 0x300 \+ Node ID | 0x300–0x37F |
+| TPDO3 | 0x380 | 0x380 \+ Node ID | 0x280–0x2FF |
+| RPDO3 | 0x400 | 0x400 \+ Node ID | 0x300–0x37F |
+| TPDO4 | 0x480 | 0x480 \+ Node ID | 0x280–0x2FF |
+| RPDO4 | 0x500 | 0x500 \+ Node ID | 0x300–0x37F |
 | SDO Tx | 0x600 | 0x600 \+ Node ID | 0x580–0x5FF |
 | SDO Rx | 0x580  | 0x580 \+ Node ID | 0x600–0x67F |
 | Heartbeat | 0x700 | 0x700 \+ Node ID | 0x700–0x77F |
@@ -88,7 +93,7 @@ Nodes must be set up in one long daisy chain. They will be connected by a twiste
 
 ## Node Overview
 
-This is a table summarising all of the data arriving and leaving from each node. It also shows what number each node is and what it is.  
+This is a table summarising all of the data arriving and leaving from each node. It also shows what Node ID each node is and what it does.  
 [https://docs.google.com/spreadsheets/d/1OaXG5B06xnvpNkGQIkrtbM\_n-pCCqvnd99yezD7YYoQ/edit?gid=0\#gid=0](https://docs.google.com/spreadsheets/d/1OaXG5B06xnvpNkGQIkrtbM_n-pCCqvnd99yezD7YYoQ/edit?gid=0#gid=0) 
 
 ## CAN parameters
@@ -104,7 +109,7 @@ These are changed by the NMT controller. There are three main operating modes. *
 
 ## Boot up protocol
 
-The main controller is set as the NMT controller. This node will start in the “not operational” state and wait for a switch/ push button to be pressed to start initialization. It will then set each node in the network to pre operational state. Each node will do a self check and ensure that everything is okay. If everything is okay, a button will be pushed to put everything into the operational state. From here the train will function fully.
+The main controller is set as the NMT controller. This node will start in the “not operational” state and wait for a switch to be turned to preoperational. It will then set each node in the network to pre operational state. Each node will do a self check and ensure that everything is okay. If everything is okay, you can now switch to opertaional state. From here the train will function fully.
 
 
 # Software
@@ -112,18 +117,21 @@ The main controller is set as the NMT controller. This node will start in the �
 In order to use CAN MREX you will be pulling the CAN MREX github repository and building your projects within a copy of the MAIN folder.  
 [https://github.com/Monash-Railway-Express/CAN\_MREx](https://github.com/Monash-Railway-Express/CAN_MREx)   
 ![](assets/image4.png) 
+
 You should be able to do everything you need to do within the main.ino file. I would suggest renaming this file to your own project file name along with the copied main folder.
 
-CAN MREx has been designed so that when there are updates to the software your main.ino file will not need to change. All you'll need to do is drop all the new files and you're good to go.
+CAN MREx has been designed so that when there are updates to the software your main.ino file will not need to change. All you'll need to do is drop all the new files into your project folder and you're good to go.
 
 ![](assets/image5.png)
 
 All code you can configure/ change will be within User code begin and User code end areas.  
 In this documentation we will go through functions you can call to use functionalities of CAN MREX such as the one below:  
-  registerODEntry(0x2000, 0x01, 2, sizeof(uint16\_t), \&speed);
+  
+   registerODEntry(0x2000, 0x01, 2, sizeof(uint16\_t), \&speed);
 
 **Please make sure that when you’re writing code for CAN bus that you write non blocking code for ease of implementation.**  
 ![](assets/image6.png) 
+
 This is an example where we only update the brakes every 100ms so that the CANhandler can run as much as possible and so we’re not wasting cycles on checking if the state has changed.
 
 **Also please make sure you are using uint8\_t, uint16\_t and unit32\_t for variables cause the can bus only accepts unsigned ints. Talk to me if you’re worried about this.**
@@ -161,7 +169,7 @@ Add here link to excel
 
 # Transmit types
 
-## SDOs {#sdos}
+## SDOs 
 
 **Purpose**: Used for configuration of parameters that we need to ensure are updated successfully every time. For example the cruise control on/off switch
 
