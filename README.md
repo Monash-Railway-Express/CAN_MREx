@@ -352,7 +352,7 @@ Heartbeats will be sent out automatically by every node every second. A single n
 
 ## EMCY (0x80)
 
-Emergency messages are crucial on our lovomotice. There is fast error reporting as it is a high priority message on the bus. This means nodes will react to this message before anything else.
+Emergency messages are crucial on our locomotive. There is fast error reporting as it is a high priority message on the bus. This means nodes will react to this message before anything else.
 
 ### Sending an emergency message:
 
