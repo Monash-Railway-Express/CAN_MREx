@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.12.0] - 2026-1-13
+### Changed
+- The libary should now be added from the library manager rather than downloading and putting into your workspace
+- The #include header has changed from #include <CM.h> to #include can_mrex.h
+
+---
+
 ## [1.11.0] - 2025-10-10
 ### Added
 - File version updater that updates all files in main in version control folder
