@@ -2,7 +2,7 @@ import os
 import re
 
 folder_path = os.path.dirname(os.path.abspath(__file__))
-new_version = "1.11.0"
+new_version = "1.12.0"
 
 version_pattern = re.compile(r"(Version:\s*)\d+\.\d+(\.\d+)?")
 
