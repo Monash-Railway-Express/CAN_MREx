@@ -1,7 +1,7 @@
 /**
  * CAN MREX Combined headers file 
  *
- * File:            CM.h
+ * File:            can_mrex.h
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    13/09/2025
@@ -11,8 +11,8 @@
  */
 
 
-#ifndef CM_H
-#define CM_H
+#ifndef CAN_MREX_H
+#define CAN_MREX_H
 
 
 #include "driver/twai.h"
