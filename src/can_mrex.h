@@ -1,11 +1,11 @@
 /**
  * CAN MREX Combined headers file 
  *
- * File:            can_mrex.h
+ * File:            CAN_MREx.h
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    13/09/2025
- * Last Modified:   13/09/2025
+ * Last Modified:   13/1/2026
  * Version:         1.11.0
  *
  */
