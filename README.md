@@ -114,8 +114,7 @@ These are changed by the NMT controller. There are three main operating modes. *
 
 ## Boot up protocol
 
-The main controller is set as the NMT controller. This node will start in the “not operational” state and wait for a switch to be turned to preoperational. It will then set each node in the network to pre operational state. Each node will do a self check and ensure that everything is okay. If everything is okay, you can now switch to opertaional state. From here the train will function fully.
-
+The Driver controls node is set as the “NMT” controller. This node will start in the “not operational” state and wait for a switch to be turned to preoperational. It will then set each node in the network to pre operational state. Each node will do a self check and ensure that everything is okay. If everything is okay, it is then possible to switch to operational state. From here the train will function fully.
 
 # Software
 
