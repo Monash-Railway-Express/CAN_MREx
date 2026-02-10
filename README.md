@@ -108,7 +108,7 @@ We have opted for the “CanBus Cable (Dragchain) 1X2X0.34” It is a single twi
 Documentation](https://lappaustralia.com.au/en/canbus-cable-dragchain-1x2x034)
 ## Connectors
 The DSUB 9 connector is very standard in CAN networks. It is relatively cheap and the screws make it quite robust. We will likely set it up so that each node has two female connectors and each node is daisy chained together with wire terminated with male connectors either side. This prevents having to fabricate custom splitters which are often a point of failure on CAN busses [1]. 
-![](assets/db9.jpg)
+![](https://m.media-amazon.com/images/I/81m-1WBY1nL.jpg)
 
 ![](assets/image3.png) 
 This diagram is of a female connector, the one that will be on the can node
