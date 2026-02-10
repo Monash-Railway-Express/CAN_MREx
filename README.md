@@ -92,9 +92,33 @@ Nodes must be set up in one long daisy chain. They will be connected by a twiste
 
 ## Connectors and Cabling 
 
-![](assets/image3.png) 
+
 
 [This link](https://docs.google.com/document/d/1z_m1jUXGCUGbTQQ1tjzIbztrTMvj-k5NUkE4eM-gYQw/edit?tab=t.0#heading=h.aarlihveemr) provides a deeper insight
+
+# Can bus cabling and connector guide 
+## Cables
+According to ISO 11898-2 Cables need to be “twisted pair” and shielded. Being configured as a twisted pair ensures that any EMF that the cables experience is cancelled out. This is because CAN utilises differential signals for logic levels. The twisted pair of cables is then shielded to reduce the emf that reaches the wires. The wire resistance should be around 120 ohms. This resistance is not as important on short runs like under 10cm.
+
+We have opted for the “CanBus Cable (Dragchain) 1X2X0.34” It is a single twisted pair cable with a conductor cross section of 0.34mm^2. It is optimal for up to 10m of transmission cable (more than enough for our needs). It is optimised for moving machinery and is resistant to flex over time. For shorter runs (under 10cm) Like when travelling from transceiver to dsub 9 connector we will use 0.25mm^2 stranded wire cable.
+
+![](https://lappaustralia.com.au/images/thumbs/0010366_625.jpeg)
+
+[Cable 
+Documentation](https://lappaustralia.com.au/en/canbus-cable-dragchain-1x2x034)
+## Connectors
+The DSUB 9 connector is very standard in CAN networks. It is relatively cheap and the screws make it quite robust. We will likely set it up so that each node has two female connectors and each node is daisy chained together with wire terminated with male connectors either side. This prevents having to fabricate custom splitters which are often a point of failure on CAN busses [1]. 
+![](assets/db9.jpg)
+
+![](assets/image3.png) 
+This diagram is of a female connector, the one that will be on the can node
+
+
+[1] :This de facto mechanical standard for CAN could be implemented with the node having both male and female 9-pin D-sub connectors electrically wired to each other in parallel within the node. Bus power is fed to a node's male connector and the bus draws power from the node's female connector. This follows the electrical engineering convention that power sources are terminated at female connectors. Adoption of this standard avoids the need to fabricate custom splitters to connect two sets of bus wires to a single D connector at each node. Such nonstandard (custom) wire harnesses (splitters) that join conductors outside the node reduce bus reliability, eliminate cable interchangeability, reduce compatibility of wiring harnesses, and increase cost.”
+https://en.wikipedia.org/wiki/CAN_bus 
+
+
+
 
 ## Node Overview
 
