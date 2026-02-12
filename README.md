@@ -225,7 +225,7 @@ Implement abort codes for debugging.
 
 | Node ID | Targeted node | Index | Subindex |
 | :---- | :---- | :---- | :---- |
-| Own node id | The node you want to write to | The index in the targeted nodes OD you want to write to  | The subindex |
+| Own node id | The node you want to read from | The index in the targeted nodes OD you want to read from  | The subindex |
 
 ![](assets/image11.png)
 
