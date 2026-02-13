@@ -5,12 +5,12 @@
  * Organisation:    MREx
  * Author:          Chiara Gillam
  * Date Created:    5/08/2025
- * Last Modified:   30/09/2025
- * Version:         1.11.0
+ * Last Modified:   14/01/2026
+ * Version:         1.12.1
  *
  */
 
-#include "CM.h" // inlcudes all CAN MREx files
+#include <CAN_MREx.h> // inlcudes all CAN MREx files
 
 // User code begin: ------------------------------------------------------
 // --- CAN MREx initialisation
