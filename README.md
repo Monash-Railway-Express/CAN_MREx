@@ -107,11 +107,12 @@ We have opted for the “CanBus Cable (Dragchain) 1X2X0.34” It is a single twi
 [Cable 
 Documentation](https://lappaustralia.com.au/en/canbus-cable-dragchain-1x2x034)
 ## Connectors
-The DSUB 9 connector is very standard in CAN networks. It is relatively cheap and the screws make it quite robust. We will likely set it up so that each node has two female connectors and each node is daisy chained together with wire terminated with male connectors either side. This prevents having to fabricate custom splitters which are often a point of failure on CAN busses [1]. 
+The DSUB 9 connector is very standard in CAN networks. It is relatively cheap and the screws make it quite robust. We will set it up so that each node has two female connectors and each node is daisy chained together with male connectors. This prevents having to fabricate custom splitters which are often a point of failure on CAN busses. 
 ![](https://m.media-amazon.com/images/I/81m-1WBY1nL.jpg)
+Male DB9 (pictured left) and Female DB9 (pictured right)
 
 ![](assets/image3.png) 
-This diagram is of a female connector, the one that will be on the can node
+Above shows the pinout of a Female DB9 that will be attatched to our nodes. It shows what pins should be used for 
 
 
 [1] :This de facto mechanical standard for CAN could be implemented with the node having both male and female 9-pin D-sub connectors electrically wired to each other in parallel within the node. Bus power is fed to a node's male connector and the bus draws power from the node's female connector. This follows the electrical engineering convention that power sources are terminated at female connectors. Adoption of this standard avoids the need to fabricate custom splitters to connect two sets of bus wires to a single D connector at each node. Such nonstandard (custom) wire harnesses (splitters) that join conductors outside the node reduce bus reliability, eliminate cable interchangeability, reduce compatibility of wiring harnesses, and increase cost.”
