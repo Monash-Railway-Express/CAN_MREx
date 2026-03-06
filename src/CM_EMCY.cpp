@@ -5,8 +5,8 @@
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    12/09/2025
- * Last Modified:   15/10/2025
- * Version:         1.11.0
+ * Last Modified:   6/3/2026
+ * Version:         1.12.2
  *
  */
 
@@ -15,12 +15,12 @@
 #include "CM_ObjectDictionary.h"
 #include "CM_EMCY.h"
 
-const uint8_t MAX_MINOR_EMCY_COUNT = 5;
-uint8_t minorEMCYCount = 0;
+// const uint8_t MAX_MINOR_EMCY_COUNT = 5;
+// uint8_t minorEMCYCount = 0;
 
 void handleEMCY(const twai_message_t& rxMsg, uint8_t nodeID){
   if (rxMsg.data[0] == 0x00) nodeOperatingMode = 0x02;
-  if (rxMsg.data[0] == 0x01) minorEMCYCount += 1;
+  // if (rxMsg.data[0] == 0x01) minorEMCYCount += 1;
 }
 
 
@@ -41,12 +41,12 @@ void sendEMCY(uint8_t priority, uint8_t nodeID, uint32_t errorCode){
   }
 
   if (priority == 0x01) {
-    minorEMCYCount += 1;
-    if (minorEMCYCount >= MAX_MINOR_EMCY_COUNT) {
-      minorEMCYCount = 0;  // Reset to avoid infinite loop
-      sendEMCY(0x00, nodeID, 0x00000301);  // Major EMCY
-      return;
-    }
+    // minorEMCYCount += 1;
+    // if (minorEMCYCount >= MAX_MINOR_EMCY_COUNT) {
+    //   minorEMCYCount = 0;  // Reset to avoid infinite loop
+    //   sendEMCY(0x00, nodeID, 0x00000301);  // Major EMCY
+    //   return;
+    // }
   }
 
   if (twai_transmit(&txMsg, pdMS_TO_TICKS(100)) != ESP_OK) {
