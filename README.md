@@ -143,22 +143,23 @@ The Driver controls node is set as the “NMT” controller. This node will star
 
 # Software
 
-In order to use CAN MREX you will be pulling the CAN MREX github repository and building your projects within a copy of the MAIN folder.  
+In order to use CAN MREX you will be installing the latest version of it from the arduino library manager
 [https://github.com/Monash-Railway-Express/CAN\_MREx](https://github.com/Monash-Railway-Express/CAN_MREx)   
 ![](assets/image4.png) 
 
-You should be able to do everything you need to do within the main.ino file. I would suggest renaming this file to your own project file name along with the copied main folder.
+There is a template file that you can base your projects around under the examples called main.ino
 
-CAN MREx has been designed so that when there are updates to the software your main.ino file will not need to change. All you'll need to do is drop all the new files into your project folder and you're good to go.
+All code you can configure/ change will be within User code begin and User code end areas.  
 
 ![](assets/image5.png)
 
-All code you can configure/ change will be within User code begin and User code end areas.  
+CAN MREx has been designed so that updates are pushed to the library manager your IDE will automatically acknowledge there's an update and prompt you to update it.
+
 In this documentation we will go through functions you can call to use functionalities of CAN MREX such as the one below:  
   
    registerODEntry(0x2000, 0x01, 2, sizeof(uint16\_t), \&speed);
 
-**Please make sure that when you’re writing code for CAN bus that you write non blocking code for ease of implementation.**  
+**Please make sure that when you’re writing code for CAN bus that you write non blocking code so that the can code can be run continuously.**
 
 ![](assets/image6.png) 
 
