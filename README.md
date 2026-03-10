@@ -144,7 +144,6 @@ The Driver controls node is set as the “NMT” controller. This node will star
 # Software
 
 In order to use CAN MREX you will be installing the latest version of it from the arduino library manager
-[https://github.com/Monash-Railway-Express/CAN\_MREx](https://github.com/Monash-Railway-Express/CAN_MREx)   
 ![](assets/image4.png) 
 
 There is a template file that you can base your projects around under the examples called main.ino
