@@ -404,8 +404,27 @@ Byte 1 of the error code corresponds to what type of error it is and the rest is
 Minor faults will simply end up as a message on the can bus and will be displayed on the screen. After a ceratin amount of minor faults (currently 10) a major fault will be triggered.
 Major faults will cause an emergency stop.
 
+# Developers Notes
+## Using Arduino IDE for developing CAN MREx
+The arduino IDE is currently the best way to verify if the code produced is syntactically correct. Simply add a src.ino file to the src folder (this file will be ignored thanks to the gitignore) so that you can open that file in the Arduino IDE.
 
-# Testing process
+Add a structure similar to the following:
+// Dummy for tests
+
+#include <CAN_MREx.h>
+
+void setup() {
+}
+
+void loop() {
+}
+
+You can now using the verify button check you code.
+
+# A deeper dive
+
+
+# Testing process 
 
 The can bus should be tested in an isolated environment on a test bench to ensure all commands and functionalities are correct and filtering is working as intended.
 
