@@ -90,12 +90,6 @@ This is a SDO request sent to node 2 \[0x600 \+ node ID\] , requesting 1 byte of
 
 Nodes must be set up in one long daisy chain. They will be connected by a twisted pair shielded cable. They will also be terminated at each end of the chain with a 120ohm resistor to prevent deflection.
 
-## Connectors and Cabling 
-
-
-
-[This link](https://docs.google.com/document/d/1z_m1jUXGCUGbTQQ1tjzIbztrTMvj-k5NUkE4eM-gYQw/edit?tab=t.0#heading=h.aarlihveemr) provides a deeper insight
-
 # Can bus cabling and connector guide 
 ## Cables
 According to ISO 11898-2 Cables need to be “twisted pair” and shielded. Being configured as a twisted pair ensures that any EMF that the cables experience is cancelled out. This is because CAN utilises differential signals for logic levels. The twisted pair of cables is then shielded to reduce the emf that reaches the wires. The wire resistance should be around 120 ohms. This resistance is not as important on short runs like under 10cm.
