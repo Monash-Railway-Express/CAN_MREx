@@ -5,8 +5,8 @@
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    12/09/2025
- * Last Modified:   10/03/2026
- * Version:         1.12.2
+ * Last Modified:   14/03/2026
+ * Version:         1.13.0
  */
 
 
@@ -77,4 +77,8 @@ void enableHeartbeatMonitoring(bool enable) {
 
 bool isHeartbeatMonitoringEnabled() {
     return heartbeatMonitoringEnabled;
+}
+
+const nodeHeartbeat* getHeartbeatTable() {
+    return heartbeatTable;
 }

@@ -5,8 +5,8 @@
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    12/09/2025
- * Last Modified:   10/03/2026
- * Version:         1.12.3
+ * Last Modified:   14/03/2026
+ * Version:         1.13.0
  */
 
 #ifndef CM_HEARTBEAT_H
@@ -26,10 +26,12 @@ typedef struct {
 } nodeHeartbeat;
 
 extern nodeHeartbeat heartbeatTable[MAX_NODES];
+const nodeHeartbeat* getHeartbeatTable();
 
 void sendHeartbeat(uint8_t nodeID);
 void receiveHeartbeat(const twai_message_t& rxMsg);
 void checkHeartbeatTimeouts();
 void setupHeartbeatConsumer();
+
 
 #endif
