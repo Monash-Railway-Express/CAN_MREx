@@ -63,5 +63,6 @@ void initCANMREX(gpio_num_t TX_GPIO_NUM, gpio_num_t RX_GPIO_NUM, uint8_t nodeID)
   Serial.println("Initialising Default Object Dictionary");
   initDefaultOD();
 
-
+  Serial.println("Initialising Heartbeat Consumer Table");
+  setupHeartbeatConsumer();
  }

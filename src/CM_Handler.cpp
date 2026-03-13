@@ -26,7 +26,7 @@ void handleCAN(uint8_t nodeID, twai_message_t* pdoMsg) {
     serviceTPDOs(nodeID); // Handles all TPDOs to be sent if in operational mode
   }
   sendHeartbeat(nodeID); //sends Heartbeat periodically
-  // checkHeartbeatTimeouts(); // Checks heartbeats to make sure they're not overdue (Heartbeat consumer only)
+  checkHeartbeatTimeouts(); // Checks heartbeats to make sure they're not overdue (Heartbeat consumer only)
 
   // Receive the message
   twai_message_t rxMsg;
@@ -55,10 +55,10 @@ void handleCAN(uint8_t nodeID, twai_message_t* pdoMsg) {
   handleSDO(rxMsg, nodeID);
   return;
   } 
-  // else if (canID >= 0x700 && canID <= 0x780) { // Heartbeats
-  //   receiveHeartbeat(rxMsg);
-  //   return;
-  // } // For heartbeat consumer only
+  else if (canID >= 0x700 && canID <= 0x780) { // Heartbeats
+    receiveHeartbeat(rxMsg);
+    return;
+  } // For heartbeat consumer only
   else {
     return;
   }

@@ -368,11 +368,14 @@ Command, Node ID
 
 ## Heartbeat  {#heartbeat}
 
-Heartbeats will be sent out automatically by every node every second. A single node will double as the heartbeat consumer and will keep track of whether nodes are alive.
+Heartbeats will be sent out automatically by every node every second. You can choose which nodes you would like to montior all other heart beats. This node is called a heartbeat consumser node. These nodes can then automatically send out an emergency message if a heart beat is not recieved in the correct interval
 
 | Byte | Purpose |
 | ----- | ----- |
 | 0 | Node state (e.g., operational, pre-operational) |
+
+To setup a node as a Heart beat consumer simply call
+'enableHeartbeatMonitoring(true);' In your setup
 
 ## EMCY (0x80)
 
@@ -418,7 +421,7 @@ void setup() {
 void loop() {
 }
 
-You can now using the verify button check you code.
+You can now using the verify button check your code.
 
 # A deeper dive
 

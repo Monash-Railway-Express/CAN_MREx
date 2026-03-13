@@ -17,6 +17,9 @@
 
 #define MAX_NODES 16  // Adjust based on your network size
 
+void enableHeartbeatMonitoring(bool enable);
+bool isHeartbeatMonitoringEnabled();
+
 typedef struct {
   uint8_t hbOperatingMode;
   uint32_t lastHeartbeat;
