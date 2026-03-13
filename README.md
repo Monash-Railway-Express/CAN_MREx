@@ -144,9 +144,10 @@ The Driver controls node is set as the “NMT” controller. This node will star
 # Software
 
 In order to use CAN MREX you will be installing the latest version of it from the arduino library manager
+
 ![](assets/image4.png) 
 
-There is a template file that you can base your projects around under the examples called main.ino
+There is a template file that you can base your projects around in the examples folder called template.ino
 
 All code you can configure/ change will be within User code begin and User code end areas.  
 
@@ -158,13 +159,9 @@ In this documentation we will go through functions you can call to use functiona
   
    registerODEntry(0x2000, 0x01, 2, sizeof(uint16\_t), \&speed);
 
-**Please make sure that when you’re writing code for CAN bus that you write non blocking code so that the can code can be run continuously.**
 
-![](assets/image6.png) 
 
-This is an example where we only update the brakes every 100ms so that the CANhandler can run as much as possible and so we’re not wasting cycles on checking if the state has changed.
-
-**Also please make sure you are using uint8\_t, uint16\_t and unit32\_t for variables cause the can bus only accepts unsigned ints. Talk to me if you’re worried about this.**
+**Please make sure you are using uint8\_t, uint16\_t and unit32\_t for variables cause the can bus only accepts unsigned ints. Talk to me if you’re worried about this.**
 
 # Object Dictionary
 

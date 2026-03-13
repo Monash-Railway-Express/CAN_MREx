@@ -13,6 +13,7 @@
 #include <driver/twai.h>
 #include "CM_ObjectDictionary.h"
 #include "CM_PDO.h"
+#include "CM_Heartbeat.h"
 
 
 void initCANMREX(gpio_num_t TX_GPIO_NUM, gpio_num_t RX_GPIO_NUM, uint8_t nodeID){

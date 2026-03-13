@@ -5,8 +5,8 @@
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    5/08/2025
- * Last Modified:   10/03/2026
- * Version:         1.12.3
+ * Last Modified:   14/03/2026
+ * Version:         1.13.0
  *
  */
 
@@ -14,7 +14,7 @@
 
 // User code begin: ------------------------------------------------------
 // --- CAN MREx initialisation ---
-const uint8_t nodeID = 1;  // Change this to set your device's node ID
+uint8_t nodeID = 1;  // Change this to set your device's node ID
 
 // --- Pin Definitions ---
 #define TX_GPIO_NUM GPIO_NUM_5 // Set GPIO pin for CAN Transmit
@@ -38,6 +38,15 @@ void setup() {
   
   //Initialize CANMREX protocol
   initCANMREX(TX_GPIO_NUM, RX_GPIO_NUM, nodeID);
+  xTaskCreatePinnedToCore(
+      CAN_Task,
+      "CAN Task",
+      4096,
+      &nodeID,
+      3,
+      NULL,
+      0
+  );
 
   // User code Setup Begin: -------------------------------------------------
   // --- Register OD entries ---
@@ -58,7 +67,6 @@ void loop() {
   //User Code begin loop() ----------------------------------------------------
   // --- Stopped mode (This is default starting point) ---
   if (nodeOperatingMode == 0x02){ 
-    handleCAN(nodeID);
     uint32_t currentMs = millis();
     if (currentMs - previousMillis >= interval){
       previousMillis = currentMs;
@@ -78,12 +86,10 @@ void loop() {
 
   // --- Pre operational state (This is where you can do checks and make sure that everything is okay) ---
   if (nodeOperatingMode == 0x80){ 
-    handleCAN(nodeID);
   }
 
   // --- Operational state (Normal operating mode) ---
   if (nodeOperatingMode == 0x01){ 
-    handleCAN(nodeID);
   }
 
   //User code end loop() --------------------------------------------------------

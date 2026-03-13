@@ -25,4 +25,6 @@
 #include "CM_NMT.h"
 #include "CM_EMCY.h"
 
+ void CAN_Task(void *pvParameters);
+
 #endif

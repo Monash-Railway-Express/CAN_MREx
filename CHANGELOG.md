@@ -5,9 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.14.3] - 2026-
+---
+
+## [1.13.0] - 2026-
+### Changed
+- CAN is now a FreeRTOS task allowing you to pin it to a core, ensuring all messages are prioritied and therefore processed.
+You must now add:
+    xTaskCreatePinnedToCore(
+        CAN_Task,
+        "CAN Task",
+        4096,
+        &nodeID,   // <--- passed into pvParameters
+        3,
+        NULL,
+        0
+    );
+To your Setup() after initCANMREX()
+This has also created a clash where your nodeID declaration CANNOT be a const so change this line to:
+    uint8_t nodeID = 3;
+Also because of this feature you will now now no longer need to call handleCAN() so please get rid of any instance of this. This function will automatically be called by the FreeRTOS.
+
+- Heart consumer now has a new API to turn it on or off. Put "enableHeartbeatMonitoring(true);" in the setup() to use it.
+
+### Fixed
 - Examples are now up to date
-- CAN on interrupts
+
+### Added
+- 
 
 ---
 
