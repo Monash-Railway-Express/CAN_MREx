@@ -31,7 +31,17 @@ Also because of this feature you will now now no longer need to call handleCAN()
 - Examples are now up to date
 
 ### Added
-- 
+- Added tests for CAN MREx. This will mainly be for pre-release testing. It has basic tests for every function of CAN MREx.
+- Added API to access buffer of emergencies. To see when emergency buffer has changed do:
+if(checkMajorEMCY()) {
+    ... insert code
+}
+checkMajorEMCY() / checkMinorEMCY()  will return true if buffer has changed.
+To access a message in the buffer use:
+bool getMinorByIndex(uint8_t index, uint8_t *node, uint32_t *code); // index you want | node the error came from | error code 
+bool getMajorByIndex(uint8_t index, uint8_t *node, uint32_t *code); // index you want | node the error came from | error code 
+Major emergencies have a buffer of 32 and the Minor emergencies have a buffer of 64
+The index is in order from 0 being the newest message to max buffer - 1.
 
 ---
 

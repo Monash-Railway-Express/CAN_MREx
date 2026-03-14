@@ -363,6 +363,9 @@ High priority message on the bus. This means nodes will react to this message be
 
 Command, Node ID
 
+nodeOperatingMode also determines what types of messages can be sent. In stopped mode no PDOs or SDOs can be sent. when in pre-operational mode PDOs cannot be sent but SDOs can. In operational everything can be sent.
+
+
 ## Heartbeat  {#heartbeat}
 
 Heartbeats will be sent out automatically by every node every second. You can choose which nodes you would like to montior all other heart beats. This node is called a heartbeat consumser node. These nodes can then automatically send out an emergency message if a heart beat is not recieved in the correct interval
@@ -402,6 +405,24 @@ Byte 1 of the error code corresponds to what type of error it is and the rest is
 ### Minor and major faults
 Minor faults will simply end up as a message on the can bus and will be displayed on the screen. After a ceratin amount of minor faults (currently 10) a major fault will be triggered.
 Major faults will cause an emergency stop.
+
+### Emergency buffers API
+Major and minor emergencies are stored in a buffer and can be accessed in your code. The major buffer store 32 messages and the minor buffer store 64 (max buffers). To access these messages you can use the following functions:
+
+'bool getMinorByIndex(uint8_t index, uint8_t *node, uint32_t *code);'
+
+'bool getMajorByIndex(uint8_t index, uint8_t *node, uint32_t *code);'
+
+| Variable | Definition |
+|-------|-------------|
+| index | index you want (0 being the newest message and the max buffer - 1 being the oldest) |
+| node | node the error came from | 
+| code | error code |
+
+To see when the emergency buffer has changed poll this repeatedly:
+if(checkMajorEMCY()) {
+    ... insert code
+}
 
 # Developers Notes
 ## Using Arduino IDE for developing CAN MREx

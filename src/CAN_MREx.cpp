@@ -10,7 +10,7 @@
  *
  */
 
- #include "CAN_MREx.h"
+#include "CAN_MREx.h"
 
 void CAN_Task(void *pvParameters) {
     uint8_t nodeID = *(uint8_t*)pvParameters;
