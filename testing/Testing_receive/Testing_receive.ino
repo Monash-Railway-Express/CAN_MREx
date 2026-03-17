@@ -10,7 +10,7 @@
  *
  */
 
-#include <CAN_MREx.h> // Inlcudes all CAN MREX files
+#include "CAN_MREx.h" // Inlcudes all CAN MREX files
 
 // User code begin: ------------------------------------------------------
 //Includes
@@ -19,8 +19,8 @@
 
 // --- CAN MREx variables ---
 uint8_t nodeID = 2;  // Change this to set your device's node ID
-#define TX_GPIO_NUM GPIO_NUM_4 // Set GPIO pin for CAN Transmit
-#define RX_GPIO_NUM GPIO_NUM_5 // Set GPIO pins for CAN Receive
+#define TX_GPIO_NUM GPIO_NUM_5 // Set GPIO pin for CAN Transmit
+#define RX_GPIO_NUM GPIO_NUM_4 // Set GPIO pins for CAN Receive
 
 
 // --- Pin Definitions ---
@@ -31,6 +31,10 @@ uint8_t nodeID = 2;  // Change this to set your device's node ID
 uint16_t speed = 0;
 uint8_t brake = 0;
 uint8_t start_timeout = 0;
+uint8_t mode = 0;
+
+
+
 
 
 // User code end ---------------------------------------------------------
@@ -43,6 +47,7 @@ void setup() {
 
   //Initialize CANMREX protocol
   initCANMREX(TX_GPIO_NUM, RX_GPIO_NUM, nodeID);
+  nodeOperatingMode = 0x01; // Start in Operational
   xTaskCreatePinnedToCore(
       CAN_Task,
       "CAN Task",
@@ -53,12 +58,13 @@ void setup() {
       0
   );
   
-  nodeOperatingMode = 0x01; // Start in Operational
+  
 
   // User code Setup Begin: -------------------------------------------------
   // --- Register OD entries ---
   registerODEntry(0x2000, 0x01, 2, sizeof(speed), &speed);
   registerODEntry(0x2001, 0x00, 2, sizeof(brake), &brake); 
+  registerODEntry(0x0001, 0x00, 2, sizeof(mode), &mode); 
 
   // --- Register TPDOs ---
 
@@ -78,8 +84,8 @@ void setup() {
 
 void loop() {
   // //User Code begin loop() ----------------------------------------------------
-
-  
+  Serial.println(nodeOperatingMode);
+  delay(200);
 
   //User code end loop() --------------------------------------------------------
 }

@@ -10,14 +10,14 @@
  *
  */
 
-#include <CAN_MREx.h>
+#include "CAN_MREx.h"
 
 // -------------------------
 // CAN MREx configuration
 // -------------------------
 uint8_t nodeID = 1;
-#define TX_GPIO_NUM GPIO_NUM_4
-#define RX_GPIO_NUM GPIO_NUM_5
+#define TX_GPIO_NUM GPIO_NUM_14
+#define RX_GPIO_NUM GPIO_NUM_13
 
 // -------------------------
 // Test state machine
@@ -28,7 +28,6 @@ enum TestStage {
   TEST_HEARTBEAT,
   TEST_EMCY,
   TEST_TPDO,
-  TEST_RPDO,
   TEST_SDO,
   TEST_COMPLETE
 };
@@ -66,7 +65,7 @@ void printHeartbeatTable() {
       Serial.print(": Mode=0x");
       Serial.print(table[i].hbOperatingMode, HEX);
       Serial.print("  LastHB=");
-      Serial.println(table[i].lastHeartbeat);
+      Serial.println(millis() - table[i].lastHeartbeat);
   }
   Serial.println("---------------------------");
 }
@@ -124,14 +123,17 @@ void loop() {
       Serial.println("Checking CAN initialisation...");
       delay(500);
 
+      sendNMT(0x01, 2);
+
       // Basic sanity check
-      if (nodeOperatingMode == 0x02) {
-        printPass("Node started in STOPPED mode");
+      if (nodeOperatingMode == 0x01) {
+        printPass("Node started in Operational mode");
       } else {
         printFail("Node did not start in STOPPED mode");
       }
 
       currentTest = TEST_SDO;
+      delay(1000);
       break;
 
     // ---------------------------------------------------------
@@ -153,6 +155,7 @@ void loop() {
       else printFail("SDO read/write failed");
 
       currentTest = TEST_TPDO;
+      delay(1000);
       break;
     }
     
@@ -178,6 +181,7 @@ void loop() {
       else printFail("PDOs failed");
 
       currentTest = TEST_EMCY;
+      delay(1000);
       break;
     }
 
@@ -195,6 +199,7 @@ void loop() {
       if(node2_operating_mode == 0x02 && nodeOperatingMode == 0x02) printPass("EMCY worked");
 
       currentTest = TEST_NMT;
+      delay(1000);
       break;
     }
     // ---------------------------------------------------------
@@ -212,7 +217,7 @@ void loop() {
       else printFail("PRE-OP failed");
 
       Serial.println("Sending OPERATIONAL...");
-      sendNMT(0x01, nodeID);
+      sendNMT(0x01, 2);
       delay(1);
 
       node2_operating_mode = executeSDORead(nodeID, 2, 0x1000, 0x00);// Node ID, targeted node, index, subindex
@@ -220,7 +225,7 @@ void loop() {
       else printFail("Operational failed");
 
       Serial.println("Sending STOP...");
-      sendNMT(0x02, nodeID);
+      sendNMT(0x02, 2);
       delay(200);
       
       node2_operating_mode = executeSDORead(nodeID, 2, 0x1000, 0x00);// Node ID, targeted node, index, subindex
@@ -228,6 +233,7 @@ void loop() {
       else printFail("Stopped failed");
 
       currentTest = TEST_HEARTBEAT;
+      delay(1000);
       break;
     }
     // ---------------------------------------------------------
@@ -242,6 +248,7 @@ void loop() {
       printPass("Check table to confirm pass");
 
       currentTest = TEST_COMPLETE;
+      delay(1000);
       break;
     }
     // ---------------------------------------------------------
