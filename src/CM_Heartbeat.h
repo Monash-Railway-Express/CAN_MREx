@@ -5,15 +5,15 @@
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    12/09/2025
- * Last Modified:   30/09/2025
- * Version:         1.12.2
+ * Last Modified:   10/03/2026
+ * Version:         1.12.3
  */
 
 #ifndef CM_HEARTBEAT_H
 #define CM_HEARTBEAT_H
 
 #include <Arduino.h>
-#include "driver/twai.h"
+#include <driver/twai.h>
 
 #define MAX_NODES 16  // Adjust based on your network size
 

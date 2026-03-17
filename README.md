@@ -90,12 +90,6 @@ This is a SDO request sent to node 2 \[0x600 \+ node ID\] , requesting 1 byte of
 
 Nodes must be set up in one long daisy chain. They will be connected by a twisted pair shielded cable. They will also be terminated at each end of the chain with a 120ohm resistor to prevent deflection.
 
-## Connectors and Cabling 
-
-
-
-[This link](https://docs.google.com/document/d/1z_m1jUXGCUGbTQQ1tjzIbztrTMvj-k5NUkE4eM-gYQw/edit?tab=t.0#heading=h.aarlihveemr) provides a deeper insight
-
 # Can bus cabling and connector guide 
 ## Cables
 According to ISO 11898-2 Cables need to be “twisted pair” and shielded. Being configured as a twisted pair ensures that any EMF that the cables experience is cancelled out. This is because CAN utilises differential signals for logic levels. The twisted pair of cables is then shielded to reduce the emf that reaches the wires. The wire resistance should be around 120 ohms. This resistance is not as important on short runs like under 10cm.
@@ -143,22 +137,22 @@ The Driver controls node is set as the “NMT” controller. This node will star
 
 # Software
 
-In order to use CAN MREX you will be pulling the CAN MREX github repository and building your projects within a copy of the MAIN folder.  
-[https://github.com/Monash-Railway-Express/CAN\_MREx](https://github.com/Monash-Railway-Express/CAN_MREx)   
+In order to use CAN MREX you will be installing the latest version of it from the arduino library manager
 ![](assets/image4.png) 
 
-You should be able to do everything you need to do within the main.ino file. I would suggest renaming this file to your own project file name along with the copied main folder.
+There is a template file that you can base your projects around under the examples called main.ino
 
-CAN MREx has been designed so that when there are updates to the software your main.ino file will not need to change. All you'll need to do is drop all the new files into your project folder and you're good to go.
+All code you can configure/ change will be within User code begin and User code end areas.  
 
 ![](assets/image5.png)
 
-All code you can configure/ change will be within User code begin and User code end areas.  
+CAN MREx has been designed so that updates are pushed to the library manager your IDE will automatically acknowledge there's an update and prompt you to update it.
+
 In this documentation we will go through functions you can call to use functionalities of CAN MREX such as the one below:  
   
    registerODEntry(0x2000, 0x01, 2, sizeof(uint16\_t), \&speed);
 
-**Please make sure that when you’re writing code for CAN bus that you write non blocking code for ease of implementation.**  
+**Please make sure that when you’re writing code for CAN bus that you write non blocking code so that the can code can be run continuously.**
 
 ![](assets/image6.png) 
 
@@ -403,8 +397,27 @@ Byte 1 of the error code corresponds to what type of error it is and the rest is
 Minor faults will simply end up as a message on the can bus and will be displayed on the screen. After a ceratin amount of minor faults (currently 10) a major fault will be triggered.
 Major faults will cause an emergency stop.
 
+# Developers Notes
+## Using Arduino IDE for developing CAN MREx
+The arduino IDE is currently the best way to verify if the code produced is syntactically correct. Simply add a src.ino file to the src folder (this file will be ignored thanks to the gitignore) so that you can open that file in the Arduino IDE.
 
-# Testing process
+Add a structure similar to the following:
+// Dummy for tests
+
+#include <CAN_MREx.h>
+
+void setup() {
+}
+
+void loop() {
+}
+
+You can now using the verify button check you code.
+
+# A deeper dive
+
+
+# Testing process 
 
 The can bus should be tested in an isolated environment on a test bench to ensure all commands and functionalities are correct and filtering is working as intended.
 

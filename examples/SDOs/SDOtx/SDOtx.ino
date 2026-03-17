@@ -1,17 +1,17 @@
 /**
- * CAN MREX main (Template) file 
+ * CAN MREX SDO transmit example file 
  *
- * File:            main.ino
+ * File:            SDOtx.ino
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    5/08/2025
- * Last Modified:   20/10/2025
- * Version:         1.11.0
+ * Last Modified:   10/03/2026
+ * Version:         1.12.3
  *
  */
 
 
-#include "CM.h" // inlcudes all CAN MREX files
+#include <CAN_MREx.h> // Inlcudes all CAN MREX files
 
 // User code begin: ------------------------------------------------------
 // --- CAN MREx initialisation ---
