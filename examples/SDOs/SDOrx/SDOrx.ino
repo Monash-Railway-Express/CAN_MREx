@@ -48,14 +48,7 @@ void setup() {
   
 
   // --- Register RPDOs ---
-  configureRPDO(0, 0x180 + 1, 255, 0);         // COB-ID, transType, inhibit
 
-  PdoMapEntry rpdoEntries[] = {
-    {0x2000, 0x01, 16},  // Example: index 0x2000, subindex 1, 16 bits
-    {0x2001, 0x00, 8}    // Example: index 0x2001, subindex 0, 8 bits
-  };
-  
-  mapRPDO(0, rpdoEntries, 2);
 
 
   // User code Setup end ------------------------------------------------------
