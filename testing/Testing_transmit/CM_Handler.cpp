@@ -51,7 +51,11 @@ void handleCAN(uint8_t nodeID, twai_message_t* pdoMsg) {
     processRPDO(rxMsg, nodeID);
     return;
   } 
-  else if (canID == 0x600 + nodeID && (nodeOperatingMode == 0x01 || nodeOperatingMode == 0x80)) {
+  else if (canID >= 0x580 && canID <= 0x5FF) { // SDO responses
+    storeSDOResponse(rxMsg); 
+    return;
+  }
+  else if (canID == 0x600 + nodeID && (nodeOperatingMode == 0x01 || nodeOperatingMode == 0x80)) { // SDO transmits
   handleSDO(rxMsg, nodeID);
   return;
   } 

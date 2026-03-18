@@ -47,7 +47,6 @@ void setup() {
 
   //Initialize CANMREX protocol
   initCANMREX(TX_GPIO_NUM, RX_GPIO_NUM, nodeID);
-  nodeOperatingMode = 0x01; // Start in Operational
   xTaskCreatePinnedToCore(
       CAN_Task,
       "CAN Task",

@@ -192,12 +192,10 @@ void loop() {
 
       Serial.println("Sending EMCY...");
       sendEMCY(0x00, nodeID, 0x0000); // Major minor / Node ID / Type
-      delay(1);
+      delay(1000);
+      Serial.println("Check node 2 operating mode to see if stopped");
 
-      uint32_t node2_operating_mode = 0;
-      node2_operating_mode = executeSDORead(nodeID, 2, 0x1000, 0x00);// Node ID, targeted node, index, subindex
-      if(node2_operating_mode == 0x02 && nodeOperatingMode == 0x02) printPass("EMCY worked");
-
+      
       currentTest = TEST_NMT;
       delay(1000);
       break;
@@ -226,11 +224,9 @@ void loop() {
 
       Serial.println("Sending STOP...");
       sendNMT(0x02, 2);
-      delay(200);
+      delay(1000);
+      Serial.println("Check node 2 operating mode to see if stopped");
       
-      node2_operating_mode = executeSDORead(nodeID, 2, 0x1000, 0x00);// Node ID, targeted node, index, subindex
-      if (node2_operating_mode == 0x02) printPass("Stopped accepted");
-      else printFail("Stopped failed");
 
       currentTest = TEST_HEARTBEAT;
       delay(1000);

@@ -60,7 +60,7 @@ void checkHeartbeatTimeouts() {
         if (heartbeatTable[i].lastHeartbeat > 0 &&
             currentMs - heartbeatTable[i].lastHeartbeat > heartbeatTimeout) {
             sendEMCY(0x00, i, 0x00000101);
-            Serial.println("heartbeat timeout on node ");
+            Serial.print("Error 0x00000101: Heartbeat timeout on node ");
             Serial.println(i);
         }
     }

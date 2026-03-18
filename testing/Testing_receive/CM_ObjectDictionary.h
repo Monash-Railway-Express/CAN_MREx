@@ -17,7 +17,7 @@
 
 #include <stdint.h>
 
-extern uint8_t nodeOperatingMode;  // set operating mode to 0x02 initially
+extern volatile uint8_t nodeOperatingMode;  // set operating mode to 0x02 initially
 extern uint32_t heartbeatInterval;
 
 typedef struct {

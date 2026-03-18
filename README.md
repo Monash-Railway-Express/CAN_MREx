@@ -185,11 +185,15 @@ The index and subindex are essentially the address of the variable. Permission a
 
 ## Object Dictionary lookup 
 
-[This](https://docs.google.com/spreadsheets/d/1OaXG5B06xnvpNkGQIkrtbM_n-pCCqvnd99yezD7YYoQ/edit?gid=1912354743#gid=1912354743) is the link to the object dictionary look up. If you want make a new object dictionary entry please put it in here first and under any nodes that use it.
+[This](https://docs.google.com/spreadsheets/d/1OaXG5B06xnvpNkGQIkrtbM_n-pCCqvnd99yezD7YYoQ/edit?gid=1912354743#gid=1912354743) is the link to the object dictionary look up. If you want to make a new object dictionary entry please put it in here first and under any nodes that use it.
 
-If you need inspiration for what index to use for your varaibles this could be helpful:
+If you need inspiration for what index to use for your variables this could be helpful:
 
 [Myostat](https://docs.myostat.ca/cm1-e/user-guide/object-dictionary#ObjectDictionary-0x606C:Speedactualvalue) 
+
+**Important note:**
+
+If you have an object dictionary variable that can be changed by your own node and also by another node you must wrap it in a mutex!!!
 
 # Transmit types
 
@@ -254,7 +258,7 @@ Implement abort codes for debugging.
 Since it always returns a 32 bit value you will need to typecast it to have it in the format you want. You must put it into a temporary value before typecasting it as otherwise you can cause memory leaks and undefined behaviour.
 
 **SDO Confirmations/responses**  
-The receiving node will automatically update its Object dictionary and confirm this when it receives an SDO write request. It will also automatically send back its data from an SDO read request. You do not need to do anything to receive this function as long as the handleCAN() function is repeatedly polled. 
+The receiving node will automatically update its Object dictionary and confirm this when it receives an SDO write request. It will also automatically send back its data from an SDO read request. You do not need to do anything to receive this function.
 
 ## PDOs
 
@@ -322,9 +326,9 @@ Don’t forget that the maximum amount of bytes allowed in one data transfer is 
 
 In this example we have mapped TPDO1 to send from COB ID 181 (Its node 1). It is sending the values from index 0x2000, 0x01 and 0x2001, 0x00 in the object dictionary. It is set up to send every 1000ms with an inhibit of 100ms. 
 
-CAN MREX will automatically send the values in your object dictionary as long as handleCAN() function is continuously being polled. It will also only send the data if it’s changed values which frees up the can network.
+CAN MREX will automatically send the values in your object dictionary. It will also only send the data if it’s changed values which frees up the can network.
 
-If you don’t want to send it with a 1000ms timer you could also have it so that it sends when you want it to using the markTpdoDirty(pdonum) Function. You pass the TPDO number you want to mark as dirty and next time the handleCAN() function is called. You can also have both a timer and the marktpdo dirty function working together. This is where the inhibit timer could come in handy.  
+If you don’t want to send it with a 1000ms timer you could also have it so that it sends when you want it to using the markTpdoDirty(pdonum) Function. You pass the TPDO number you want to mark as dirty and it will automatically send it once. You can also have both a timer and the marktpdo dirty function working together. This is where the inhibit timer could come in handy.  
 
 ![](assets/image13.png)
 
@@ -335,7 +339,7 @@ This corresponds to TPDO 1
 ![](assets/image14.png) 
 
 In this example you can see that we have configured RPDO1 to receive from COB ID 0x181 asynchronously and without inhibiting how often it receives that message. We then set up the Map entry so that we have two OD entries being mapped to this RPDO (brake and speed).  We then officially map the entry with mapRPDO mapping RPDO1 to two values in the OD.  
-CAN MREX will automatically receive and update the values in your object dictionary as long as handleCAN() function is continuously being polled.
+CAN MREX will automatically receive and update the values in your object dictionary.
 
 ## NMT 
 
