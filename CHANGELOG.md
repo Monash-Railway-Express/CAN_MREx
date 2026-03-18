@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [1.13.0] - 2026-
+## [1.13.0] - 2026-3-18
 ### Changed
 - CAN is now a FreeRTOS task allowing you to pin it to a core, ensuring all messages are prioritied and therefore processed.
 You must now add:
