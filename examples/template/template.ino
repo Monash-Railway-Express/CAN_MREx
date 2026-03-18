@@ -44,7 +44,7 @@ void setup() {
   xTaskCreatePinnedToCore(
       CAN_Task,
       "CAN Task",
-      4096,
+      6144,
       &nodeID,
       3,
       NULL,
