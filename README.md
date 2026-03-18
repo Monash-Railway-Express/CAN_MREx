@@ -138,9 +138,10 @@ The Driver controls node is set as the “NMT” controller. This node will star
 # Software
 
 In order to use CAN MREX you will be installing the latest version of it from the arduino library manager
+
 ![](assets/image4.png) 
 
-There is a template file that you can base your projects around under the examples called main.ino
+There is a template file that you can base your projects around in the examples folder called template.ino
 
 All code you can configure/ change will be within User code begin and User code end areas.  
 
@@ -152,13 +153,9 @@ In this documentation we will go through functions you can call to use functiona
   
    registerODEntry(0x2000, 0x01, 2, sizeof(uint16\_t), \&speed);
 
-**Please make sure that when you’re writing code for CAN bus that you write non blocking code so that the can code can be run continuously.**
 
-![](assets/image6.png) 
 
-This is an example where we only update the brakes every 100ms so that the CANhandler can run as much as possible and so we’re not wasting cycles on checking if the state has changed.
-
-**Also please make sure you are using uint8\_t, uint16\_t and unit32\_t for variables cause the can bus only accepts unsigned ints. Talk to me if you’re worried about this.**
+**Please make sure you are using uint8\_t, uint16\_t and unit32\_t for variables cause the can bus only accepts unsigned ints. Talk to me if you’re worried about this.**
 
 # Object Dictionary
 
@@ -182,11 +179,15 @@ The index and subindex are essentially the address of the variable. Permission a
 
 ## Object Dictionary lookup 
 
-[This](https://docs.google.com/spreadsheets/d/1OaXG5B06xnvpNkGQIkrtbM_n-pCCqvnd99yezD7YYoQ/edit?gid=1912354743#gid=1912354743) is the link to the object dictionary look up. If you want make a new object dictionary entry please put it in here first and under any nodes that use it.
+[This](https://docs.google.com/spreadsheets/d/1OaXG5B06xnvpNkGQIkrtbM_n-pCCqvnd99yezD7YYoQ/edit?gid=1912354743#gid=1912354743) is the link to the object dictionary look up. If you want to make a new object dictionary entry please put it in here first and under any nodes that use it.
 
-If you need inspiration for what index to use for your varaibles this could be helpful:
+If you need inspiration for what index to use for your variables this could be helpful:
 
 [Myostat](https://docs.myostat.ca/cm1-e/user-guide/object-dictionary#ObjectDictionary-0x606C:Speedactualvalue) 
+
+**Important note:**
+
+If you have an object dictionary variable that can be changed by your own node and also by another node you must wrap it in a mutex!!!
 
 # Transmit types
 
@@ -251,7 +252,7 @@ Implement abort codes for debugging.
 Since it always returns a 32 bit value you will need to typecast it to have it in the format you want. You must put it into a temporary value before typecasting it as otherwise you can cause memory leaks and undefined behaviour.
 
 **SDO Confirmations/responses**  
-The receiving node will automatically update its Object dictionary and confirm this when it receives an SDO write request. It will also automatically send back its data from an SDO read request. You do not need to do anything to receive this function as long as the handleCAN() function is repeatedly polled. 
+The receiving node will automatically update its Object dictionary and confirm this when it receives an SDO write request. It will also automatically send back its data from an SDO read request. You do not need to do anything to receive this function.
 
 ## PDOs
 
@@ -319,9 +320,9 @@ Don’t forget that the maximum amount of bytes allowed in one data transfer is 
 
 In this example we have mapped TPDO1 to send from COB ID 181 (Its node 1). It is sending the values from index 0x2000, 0x01 and 0x2001, 0x00 in the object dictionary. It is set up to send every 1000ms with an inhibit of 100ms. 
 
-CAN MREX will automatically send the values in your object dictionary as long as handleCAN() function is continuously being polled. It will also only send the data if it’s changed values which frees up the can network.
+CAN MREX will automatically send the values in your object dictionary. It will also only send the data if it’s changed values which frees up the can network.
 
-If you don’t want to send it with a 1000ms timer you could also have it so that it sends when you want it to using the markTpdoDirty(pdonum) Function. You pass the TPDO number you want to mark as dirty and next time the handleCAN() function is called. You can also have both a timer and the marktpdo dirty function working together. This is where the inhibit timer could come in handy.  
+If you don’t want to send it with a 1000ms timer you could also have it so that it sends when you want it to using the markTpdoDirty(pdonum) Function. You pass the TPDO number you want to mark as dirty and it will automatically send it once. You can also have both a timer and the marktpdo dirty function working together. This is where the inhibit timer could come in handy.  
 
 ![](assets/image13.png)
 
@@ -332,7 +333,7 @@ This corresponds to TPDO 1
 ![](assets/image14.png) 
 
 In this example you can see that we have configured RPDO1 to receive from COB ID 0x181 asynchronously and without inhibiting how often it receives that message. We then set up the Map entry so that we have two OD entries being mapped to this RPDO (brake and speed).  We then officially map the entry with mapRPDO mapping RPDO1 to two values in the OD.  
-CAN MREX will automatically receive and update the values in your object dictionary as long as handleCAN() function is continuously being polled.
+CAN MREX will automatically receive and update the values in your object dictionary.
 
 ## NMT 
 
@@ -360,13 +361,19 @@ High priority message on the bus. This means nodes will react to this message be
 
 Command, Node ID
 
+nodeOperatingMode also determines what types of messages can be sent. In stopped mode no PDOs or SDOs can be sent. when in pre-operational mode PDOs cannot be sent but SDOs can. In operational everything can be sent.
+
+
 ## Heartbeat  {#heartbeat}
 
-Heartbeats will be sent out automatically by every node every second. A single node will double as the heartbeat consumer and will keep track of whether nodes are alive.
+Heartbeats will be sent out automatically by every node every second. You can choose which nodes you would like to montior all other heart beats. This node is called a heartbeat consumser node. These nodes can then automatically send out an emergency message if a heart beat is not recieved in the correct interval
 
 | Byte | Purpose |
 | ----- | ----- |
 | 0 | Node state (e.g., operational, pre-operational) |
+
+To setup a node as a Heart beat consumer simply call
+'enableHeartbeatMonitoring(true);' In your setup
 
 ## EMCY (0x80)
 
@@ -397,6 +404,24 @@ Byte 1 of the error code corresponds to what type of error it is and the rest is
 Minor faults will simply end up as a message on the can bus and will be displayed on the screen. After a ceratin amount of minor faults (currently 10) a major fault will be triggered.
 Major faults will cause an emergency stop.
 
+### Emergency buffers API
+Major and minor emergencies are stored in a buffer and can be accessed in your code. The major buffer store 32 messages and the minor buffer store 64 (max buffers). To access these messages you can use the following functions:
+
+'bool getMinorByIndex(uint8_t index, uint8_t *node, uint32_t *code);'
+
+'bool getMajorByIndex(uint8_t index, uint8_t *node, uint32_t *code);'
+
+| Variable | Definition |
+|-------|-------------|
+| index | index you want (0 being the newest message and the max buffer - 1 being the oldest) |
+| node | node the error came from | 
+| code | error code |
+
+To see when the emergency buffer has changed poll this repeatedly:
+if(checkMajorEMCY()) {
+    ... insert code
+}
+
 # Developers Notes
 ## Using Arduino IDE for developing CAN MREx
 The arduino IDE is currently the best way to verify if the code produced is syntactically correct. Simply add a src.ino file to the src folder (this file will be ignored thanks to the gitignore) so that you can open that file in the Arduino IDE.
@@ -412,7 +437,7 @@ void setup() {
 void loop() {
 }
 
-You can now using the verify button check you code.
+You can now using the verify button check your code.
 
 # A deeper dive
 

@@ -6,12 +6,12 @@
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    30/09/2025
- * Last Modified:   15/10/2025
- * Version:         1.11.0
+ * Last Modified:   10/03/2026
+ * Version:         1.13.0
  *
  */
 
-#include "driver/twai.h"
+#include <driver/twai.h>
 #include <Arduino.h>
 #include "CM_Handler.h"
 #include "CM_SDO.h"
@@ -19,6 +19,16 @@
 #include "CM_EMCY.h"
 
 
+// SDO Response inbox
+volatile bool sdoResponseReady = false;
+twai_message_t sdoResponse;
+
+void storeSDOResponse(const twai_message_t& msg) {
+    sdoResponse = msg;
+    sdoResponseReady = true;
+}
+
+// Handle SDO transmits 
 void handleSDO(const twai_message_t& rxMsg, uint8_t nodeID) {
   uint16_t index = rxMsg.data[1] | (rxMsg.data[2] << 8);
   uint8_t subindex = rxMsg.data[3];
@@ -139,6 +149,8 @@ void prepareSDOTransmit(uint8_t cmd, uint16_t index, uint8_t subindex, const voi
 }
 
 void transmitSDO(uint8_t nodeID, uint8_t targetNodeID, uint8_t* data, uint32_t* outValue) { 
+  sdoResponseReady = false; // Clear SDO response inbox
+
   // Prepare SDO for transmit
   twai_message_t msg;
   msg.identifier = 0x600 + targetNodeID;
@@ -156,53 +168,65 @@ void transmitSDO(uint8_t nodeID, uint8_t targetNodeID, uint8_t* data, uint32_t* 
   waitSDOResponse(outValue, targetNodeID, nodeID);
 }
 
-void waitSDOResponse(uint32_t* outValue, uint8_t targetNodeID, uint8_t nodeID){
-  // Wait for response
-  unsigned long start = millis();
-  twai_message_t response;
-  while (millis() - start < 200) { // try until timeout and ensure messages received before are handled
-    if (twai_receive(&response, pdMS_TO_TICKS(50)) != ESP_OK)
-      continue;
+void waitSDOResponse(uint32_t* outValue, uint8_t targetNodeID, uint8_t nodeID) {
 
-    if (response.identifier == 0x580 + targetNodeID) { // Received response
+  unsigned long start = millis();
+
+  while (millis() - start < 200) {
+
+    // Check if CAN_Task delivered an SDO response
+    if (sdoResponseReady) {
+      sdoResponseReady = false;
+      twai_message_t response = sdoResponse;
+
+      uint32_t canID = response.identifier;
+      if (canID != (0x580 + targetNodeID)) {
+          // Not the response we’re waiting for – ignore it and keep waiting
+          continue;
+      }
+
       uint8_t cmd = response.data[0];
 
-      if (cmd == 0x60) return; // SDO Confirmed
+      // --- Write confirmation ---
+      if (cmd == 0x60) {
+        return;
+      }
 
+      // --- Abort ---
       if (cmd == 0x80) {
         Serial.println("Error 0x00000009: SDO Abort received");
         sendEMCY(0x01, nodeID, 0x00000009);
         return;
       }
 
-      if (cmd == 0x4F || cmd == 0x4B || cmd == 0x43) { // SDO Read 1, 2, 4 bytes
-        int32_t value = 0;
+      // --- Read response (1, 2, or 4 bytes) ---
+      if (cmd == 0x4F || cmd == 0x4B || cmd == 0x43) {
+        uint32_t value = 0;
+
         switch (cmd) {
           case 0x4F: value = response.data[4]; break;
           case 0x4B: value = response.data[4] | (response.data[5] << 8); break;
-          case 0x43: value = response.data[4] | (response.data[5] << 8) |
-                            (response.data[6] << 16) | (response.data[7] << 24); break;
+          case 0x43: value = response.data[4] | (response.data[5] << 8) |(response.data[6] << 16) |
+              (response.data[7] << 24); break;
         }
 
-        //Return value 
         if (outValue != nullptr) {
           *outValue = value;
         }
         return;
       }
 
-      sendEMCY(0x01, nodeID, 0x0000000A); // Unexpected SDO CMD received in response
+      // Unexpected SDO command
       Serial.println("Error 0x0000000A: Unexpected SDO command in response");
+      sendEMCY(0x01, nodeID, 0x0000000A);
       return;
-
-
-
-    } else{ // handle messages that aren't the response 
-      handleCAN(nodeID, &response);   
     }
+
+    // Yield to CAN_Task on the other core
+    vTaskDelay(1);
   }
 
-  sendEMCY(0x00, nodeID, 0x00000008); // SDO response not received
+  // Timeout
   Serial.println("Error 0x00000008: SDO response timeout");
-
+  sendEMCY(0x00, nodeID, 0x00000008);
 }

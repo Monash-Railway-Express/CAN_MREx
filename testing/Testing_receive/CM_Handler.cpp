@@ -3,16 +3,17 @@
  *
  * File:            CM_Handler.cpp
  * Organisation:    MREX
+
  * Author:          Chiara Gillam
  * Date Created:    6/08/2025
- * Last Modified:   15/10/2025
- * Version:         1.11.0
+ * Last Modified:   14/03/2026
+ * Version:         1.13.0
  *
  */
 
 
 #include "CM_Handler.h"
-#include "driver/twai.h"
+#include <driver/twai.h>
 #include "CM_ObjectDictionary.h"
 #include "CM_SDO.h"
 #include "CM_PDO.h"
@@ -25,7 +26,7 @@ void handleCAN(uint8_t nodeID, twai_message_t* pdoMsg) {
     serviceTPDOs(nodeID); // Handles all TPDOs to be sent if in operational mode
   }
   sendHeartbeat(nodeID); //sends Heartbeat periodically
-  // checkHeartbeatTimeouts(); // Checks heartbeats to make sure they're not overdue (Heartbeat consumer only)
+  checkHeartbeatTimeouts(); // Checks heartbeats to make sure they're not overdue (Heartbeat consumer only)
 
   // Receive the message
   twai_message_t rxMsg;
@@ -45,19 +46,23 @@ void handleCAN(uint8_t nodeID, twai_message_t* pdoMsg) {
   else if (canID >= 0x081 && canID <= 0x0FF) { // Emergency messages (always processed)
     handleEMCY(rxMsg, nodeID);
     return;
-  } 
+  }
   else if ((canID >= 0x180 && canID <= 0x57F) && nodeOperatingMode == 0x01) { // RPDOs (only in operational state)
     processRPDO(rxMsg, nodeID);
     return;
   } 
-  else if (canID == 0x600 + nodeID && (nodeOperatingMode == 0x01 || nodeOperatingMode == 0x80)) {
+  else if (canID >= 0x580 && canID <= 0x5FF) { // SDO responses
+    storeSDOResponse(rxMsg); 
+    return;
+  }
+  else if (canID == 0x600 + nodeID && (nodeOperatingMode == 0x01 || nodeOperatingMode == 0x80)) { // SDO transmits
   handleSDO(rxMsg, nodeID);
   return;
   } 
-  // else if (canID >= 0x700 && canID <= 0x780) { // Heartbeats
-  //   receiveHeartbeat(rxMsg);
-  //   return;
-  // } // For heartbeat consumer only
+  else if (canID >= 0x700 && canID <= 0x780) { // Heartbeats
+    receiveHeartbeat(rxMsg);
+    return;
+  } // For heartbeat consumer only
   else {
     return;
   }

@@ -5,13 +5,67 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+---
+
+## [1.13.0] - 2026-
+### Changed
+- CAN is now a FreeRTOS task allowing you to pin it to a core, ensuring all messages are prioritied and therefore processed.
+You must now add:
+
+        xTaskCreatePinnedToCore(
+            CAN_Task,
+            "CAN Task",
+            6144,
+            &nodeID,
+            3,
+            NULL,
+            0
+        );
+
+    To your Setup() after initCANMREX().
+
+    This has also created a clash where your nodeID declaration CANNOT be a const so change this line:
+
+        const uint8_t nodeID = 3;
+
+    to:
+
+        uint8_t nodeID = 3;
+
+    Also because of this feature you will now now no longer need to call handleCAN() so please get rid of any instance of this. This function will automatically be called by FreeRTOS. 
+
+- Heart consumer now has a new API to turn it on or off. Put "enableHeartbeatMonitoring(true);" in the setup() to use it.
+
+- Any variable in the object dictionary that is written to from both other nodes and the node itself now needs to be wrapped in a mutex as both cores will need to access it. (README updated)
+
+### Fixed
+- Examples are now up to date
+
+### Added
+- Added tests for CAN MREx. This will mainly be for pre-release testing. It has basic tests for every function of CAN MREx.
+- Added API to access buffer of emergencies. To see when emergency buffer has changed do:
+if(checkMajorEMCY()) {
+    ... insert code
+}
+checkMajorEMCY() / checkMinorEMCY()  will return true if buffer has changed.
+To access a message in the buffer use:
+bool getMinorByIndex(uint8_t index, uint8_t *node, uint32_t *code); // index you want | node the error came from | error code 
+bool getMajorByIndex(uint8_t index, uint8_t *node, uint32_t *code); // index you want | node the error came from | error code 
+Major emergencies have a buffer of 32 and the Minor emergencies have a buffer of 64
+The index is in order from 0 being the newest message to max buffer - 1.
+
+---
+
 ## [1.12.3] - 2026-3-9
 - 1.12.2 failed to release
+
+---
 
 ## [1.12.2] - 2026-3-6
 ### Changed
 - Removed minor emergency overload
 
+---
 
 ## [1.12.1] - 2026-1-13
 ### Changed

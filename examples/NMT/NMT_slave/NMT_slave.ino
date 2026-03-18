@@ -5,8 +5,8 @@
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    5/08/2025
- * Last Modified:   10/03/2026
- * Version:         1.12.3
+ * Last Modified:   14/03/2026
+ * Version:         1.13.0
  *
  */
 
@@ -14,9 +14,7 @@
 
 // User code begin: ------------------------------------------------------
 
-const uint8_t nodeID = 2;  // Change this to set your device's node ID
-const bool nmtMaster = false;
-const bool heartbeatConsumer = false;
+uint8_t nodeID = 2;  // Change this to set your device's node ID
 
 // --- Pin Definitions ---
 #define TX_GPIO_NUM GPIO_NUM_5 // Set GPIO pin for CAN Transmit
@@ -65,13 +63,11 @@ void loop() {
   Serial.println(nodeOperatingMode);
   // --- Stopped mode (This is default starting point) ---
   if (nodeOperatingMode == 0x02){ 
-    handleCAN(nodeID);
 
   }
 
   // --- Pre operational state (This is where you can do checks and make sure that everything is okay) ---
   if (nodeOperatingMode == 0x80) {
-    handleCAN(nodeID);
     unsigned long currentMillis = millis();
 
     if (currentMillis - previousMillis >= intervalPreOp) {
@@ -86,7 +82,6 @@ void loop() {
 
   // --- Operational state (Normal operating mode) ---
   if (nodeOperatingMode == 0x01){ 
-    handleCAN(nodeID);
     unsigned long currentMillis = millis();
 
     if (currentMillis - previousMillis >= intervalOp) {

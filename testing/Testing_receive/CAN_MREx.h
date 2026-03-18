@@ -1,21 +1,21 @@
 /**
  * CAN MREX Combined headers file 
  *
- * File:            CM.h
+ * File:            CAN_MREx.h
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    13/09/2025
- * Last Modified:   13/09/2025
- * Version:         1.11.0
+ * Last Modified:   10/03/2026
+ * Version:         1.13.0
  *
  */
 
 
-#ifndef CM_H
-#define CM_H
+#ifndef CAN_MREX_H
+#define CAN_MREX_H
 
 
-#include "driver/twai.h"
+#include <driver/twai.h>
 #include "CM_Handler.h"
 #include "CM_SDO.h"
 #include "CM_ObjectDictionary.h"
@@ -24,5 +24,7 @@
 #include "CM_Heartbeat.h"
 #include "CM_NMT.h"
 #include "CM_EMCY.h"
+
+ void CAN_Task(void *pvParameters);
 
 #endif

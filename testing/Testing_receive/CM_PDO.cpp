@@ -6,7 +6,7 @@
  * Author:          Chiara Gillam
  * Date Created:    18/08/2025
  * Last Modified:   15/10/2025
- * Version:         1.11.0
+ * Version:         1.13.0
  *
  */
 

@@ -5,14 +5,15 @@
  * Organisation:    MREX
  * Author:          Chiara Gillam
  * Date Created:    9/09/2025
- * Last Modified:   12/09/2025
- * Version:         1.11.0
+ * Last Modified:   14/03/2026
+ * Version:         1.13.0
  *
  */
 
-#include "driver/twai.h"
+#include <driver/twai.h>
 #include "CM_ObjectDictionary.h"
 #include "CM_PDO.h"
+#include "CM_Heartbeat.h"
 
 
 void initCANMREX(gpio_num_t TX_GPIO_NUM, gpio_num_t RX_GPIO_NUM, uint8_t nodeID){
@@ -63,5 +64,6 @@ void initCANMREX(gpio_num_t TX_GPIO_NUM, gpio_num_t RX_GPIO_NUM, uint8_t nodeID)
   Serial.println("Initialising Default Object Dictionary");
   initDefaultOD();
 
-
+  Serial.println("Initialising Heartbeat Consumer Table");
+  setupHeartbeatConsumer();
  }
