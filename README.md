@@ -418,11 +418,11 @@ Major and minor emergencies are stored in a buffer and can be accessed in your c
 | code | error code |
 
 To see when the emergency buffer has changed poll this repeatedly:
-if(checkMajorEMCY()) {
 
-    ... insert code
-    
+if(checkMajorEMCY()) {
+    ... insert action when emergency happens
 }
+
 CheckMajorEMCY() and CheckMinorEMCy return true or false.
 
 # Developers Notes
