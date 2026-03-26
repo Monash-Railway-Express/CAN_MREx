@@ -423,7 +423,7 @@ if(checkMajorEMCY()) {
     ... insert action when emergency happens
 }
 
-CheckMajorEMCY() and CheckMinorEMCy return true or false.
+CheckMajorEMCY() and CheckMinorEMCY return true or false.
 
 # Developers Notes
 ## Using Arduino IDE for developing CAN MREx
