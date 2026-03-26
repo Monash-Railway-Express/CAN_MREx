@@ -419,8 +419,11 @@ Major and minor emergencies are stored in a buffer and can be accessed in your c
 
 To see when the emergency buffer has changed poll this repeatedly:
 if(checkMajorEMCY()) {
+
     ... insert code
+    
 }
+CheckMajorEMCY() and CheckMinorEMCy return true or false.
 
 # Developers Notes
 ## Using Arduino IDE for developing CAN MREx
