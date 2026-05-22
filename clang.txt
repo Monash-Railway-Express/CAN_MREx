@@ -16,3 +16,5 @@ clang-tidy myfile.cpp
 Get-ChildItem -Recurse -Include *.cpp, *.h, *.ino | ForEach-Object {
     clang-tidy -i $_.FullName
 }
+
+doxygen Doxyfile
