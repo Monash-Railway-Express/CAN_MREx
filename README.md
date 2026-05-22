@@ -389,8 +389,15 @@ Emergency messages are crucial on our locomotive. There is fast error reporting 
 | 1 | Node location |
 | 2-5 | Error code (4 bytes) (little endian) I might change this for ease of reading |
 
+
+### Error Codes
 Byte 1 of the error code corresponds to what type of error it is and the rest is up to whoever creates it. A list of all error codes can be found here:  
 [https://docs.google.com/spreadsheets/d/1OaXG5B06xnvpNkGQIkrtbM\_n-pCCqvnd99yezD7YYoQ/edit?gid=1817306757\#gid=1817306757](https://docs.google.com/spreadsheets/d/1OaXG5B06xnvpNkGQIkrtbM_n-pCCqvnd99yezD7YYoQ/edit?gid=1817306757#gid=1817306757) 
+
+Example Error Code
+
+|Byte 1 |Byte 2 |Byte 3 |Byte 4 |
+| :---- | :---- | :---- | :---- |
 
 | Byte 1 Value | Description |
 | :---- | :---- |
