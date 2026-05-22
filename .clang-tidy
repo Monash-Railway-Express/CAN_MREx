@@ -1,0 +1,22 @@
+Checks: >
+  bugprone-*,
+  cppcoreguidelines-no-malloc,
+  readability-identifier-naming,
+  readability-magic-numbers,
+  readability-function-size
+
+CheckOptions:
+  - key: readability-identifier-naming.LocalVariableCase
+    value: camelBack
+  - key: readability-identifier-naming.MacroDefinitionCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.ConstantCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.GlobalVariableCase
+    value: lower_case
+  - key: readability-identifier-naming.FunctionCase
+    value: CamelCase
+  - key: readability-magic-numbers.IgnoredIntegerValues
+    value: '0;1'
+  - key: readability-function-size.LineThreshold
+    value: '50'

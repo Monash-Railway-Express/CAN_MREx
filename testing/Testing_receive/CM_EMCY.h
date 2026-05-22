@@ -16,11 +16,10 @@
 bool checkMinorEMCY();
 bool checkMajorEMCY();
 
-bool getMinorByIndex(uint8_t index, uint8_t *node, uint32_t *code);
-bool getMajorByIndex(uint8_t index, uint8_t *node, uint32_t *code);
+bool getMinorByIndex(uint8_t index, uint8_t* node, uint32_t* code);
+bool getMajorByIndex(uint8_t index, uint8_t* node, uint32_t* code);
 
 void handleEMCY(const twai_message_t& rxMsg, uint8_t nodeID);
 void sendEMCY(uint8_t priority, uint8_t nodeID, uint32_t errorCode);
-
 
 #endif

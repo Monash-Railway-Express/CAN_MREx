@@ -1,5 +1,5 @@
 /**
- * CAN MREX Handler file 
+ * CAN MREX Handler file
  *
  * File:            CM_Handler.h
  * Organisation:    MREX
@@ -10,7 +10,6 @@
  *
  */
 
-
 #ifndef CM_HANDLER_H
 #define CM_HANDLER_H
 
@@ -18,6 +17,5 @@
 #include <driver/twai.h>
 
 void handleCAN(uint8_t nodeID, twai_message_t* pdoMsg = nullptr);
-
 
 #endif

@@ -1,5 +1,5 @@
 /**
- * CAN MREX Object Dictionary file 
+ * CAN MREX Object Dictionary file
  *
  * File:            CM_ObjectDictionary.cpp
  * Organisation:    MREX
@@ -12,34 +12,34 @@
 
 #include "CM_ObjectDictionary.h"
 
-volatile uint8_t nodeOperatingMode = 0x02; // set operating mode to 0x02 initially
+volatile uint8_t nodeOperatingMode = 0x04;  // set operating mode to 0x04 (stopped) initially
 uint32_t heartbeatInterval = 1000;
 
 #define MAX_OD_ENTRIES 32
 static ODEntry objectDictionary[MAX_OD_ENTRIES];
 static int odCount = 0;
 
-
 // od entry lookup
 ODEntry* findODEntry(uint16_t index, uint8_t subindex) {
-  for (int i = 0; i < odCount; i++) {
-    if (objectDictionary[i].index == index && objectDictionary[i].subindex == subindex) {
-      return &objectDictionary[i];
+    for (int i = 0; i < odCount; i++) {
+        if (objectDictionary[i].index == index && objectDictionary[i].subindex == subindex) {
+            return &objectDictionary[i];
+        }
     }
-  }
-  return nullptr;
+    return nullptr;
 }
 
-bool registerODEntry(uint16_t index, uint8_t subindex, uint8_t access, uint8_t size, void* dataPtr) {
-  if (odCount >= MAX_OD_ENTRIES) return false;
-  objectDictionary[odCount++] = {index, subindex, access, size, dataPtr};
-  return true;
+bool registerODEntry(uint16_t index, uint8_t subindex, uint8_t access, uint8_t size,
+                     void* dataPtr) {
+    if (odCount >= MAX_OD_ENTRIES)
+        return false;
+    objectDictionary[odCount++] = {index, subindex, access, size, dataPtr};
+    return true;
 }
 
-void initDefaultOD(){
-  registerODEntry(0x1000, 0x00, 2, sizeof(uint8_t), (void*)&nodeOperatingMode); 
-  registerODEntry(0x1017, 0x00, 0, sizeof(uint32_t), &heartbeatInterval);
+void initDefaultOD() {
+    registerODEntry(0x1000, 0x00, 2, sizeof(uint8_t), (void*)&nodeOperatingMode);
+    registerODEntry(0x1017, 0x00, 0, sizeof(uint32_t), &heartbeatInterval);
 }
 
-
-//TODO add in check whether rw access
+// TODO add in check whether rw access

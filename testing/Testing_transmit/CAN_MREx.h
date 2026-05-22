@@ -1,5 +1,5 @@
 /**
- * CAN MREX Combined headers file 
+ * CAN MREX Combined headers file
  *
  * File:            CAN_MREx.h
  * Organisation:    MREX
@@ -10,21 +10,20 @@
  *
  */
 
-
 #ifndef CAN_MREX_H
 #define CAN_MREX_H
 
-
 #include <driver/twai.h>
-#include "CM_Handler.h"
-#include "CM_SDO.h"
-#include "CM_ObjectDictionary.h"
-#include "CM_PDO.h"
+
 #include "CM_Config.h"
+#include "CM_EMCY.h"
+#include "CM_Handler.h"
 #include "CM_Heartbeat.h"
 #include "CM_NMT.h"
-#include "CM_EMCY.h"
+#include "CM_ObjectDictionary.h"
+#include "CM_PDO.h"
+#include "CM_SDO.h"
 
- void CAN_Task(void *pvParameters);
+void CAN_Task(void* pvParameters);
 
 #endif

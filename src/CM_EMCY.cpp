@@ -11,14 +11,16 @@
  */
 
 // --- Includes ---
-#include <driver/twai.h>
-#include <Arduino.h>
-#include "CM_ObjectDictionary.h"
 #include "CM_EMCY.h"
 
-//Setup max minor emergencies
-// const uint8_t MAX_MINOR_EMCY_COUNT = 5;
-// uint8_t minorEMCYCount = 0;
+#include <Arduino.h>
+#include <driver/twai.h>
+
+#include "CM_ObjectDictionary.h"
+
+// Setup max minor emergencies
+//  const uint8_t MAX_MINOR_EMCY_COUNT = 5;
+//  uint8_t minorEMCYCount = 0;
 
 // --- Minor / Major Emergency buffer sizes ---
 #define MINOR_BUFFER_SIZE 64
@@ -33,7 +35,7 @@ typedef struct {
 EMCYStruct minorStruct[MINOR_BUFFER_SIZE];
 EMCYStruct majorStruct[MAJOR_BUFFER_SIZE];
 
-volatile uint8_t majorHead = 0; 
+volatile uint8_t majorHead = 0;
 volatile uint8_t majorTail = 0;
 
 volatile uint8_t minorHead = 0;
@@ -44,17 +46,16 @@ volatile uint32_t updateCounterMinor = 0;
 volatile uint32_t updateCounterMajorLast = 0;
 volatile uint32_t updateCounterMinorLast = 0;
 
-
 // --- Check if emergencies have updated
-bool checkMinorEMCY() {
+bool CheckMinorEMCY() {
     return updateCounterMinor != updateCounterMinorLast;
 }
-bool checkMajorEMCY() {
+bool CheckMajorEMCY() {
     return updateCounterMajor != updateCounterMajorLast;
 }
 
 // --- Push minor code ---
-void pushMinor(uint8_t node, uint32_t code) {
+void PushMinor(uint8_t node, uint32_t code) {
     EMCYStruct p;
     p.EMCYNode = node;
     p.errorCode = code;
@@ -73,7 +74,7 @@ void pushMinor(uint8_t node, uint32_t code) {
 }
 
 // --- Push major code ---
-void pushMajor(uint8_t node, uint32_t code) {
+void PushMajor(uint8_t node, uint32_t code) {
     EMCYStruct p;
     p.EMCYNode = node;
     p.errorCode = code;
@@ -91,13 +92,12 @@ void pushMajor(uint8_t node, uint32_t code) {
     updateCounterMajor++;
 }
 
-bool getMinorByIndex(uint8_t index, uint8_t *node, uint32_t *code) {
-    uint8_t count = (minorHead >= minorTail)
-                    ? (minorHead - minorTail)
-                    : (MINOR_BUFFER_SIZE - minorTail + minorHead);
+bool GetMinorByIndex(uint8_t index, uint8_t* node, uint32_t* code) {
+    uint8_t count = (minorHead >= minorTail) ? (minorHead - minorTail)
+                                             : (MINOR_BUFFER_SIZE - minorTail + minorHead);
 
     if (index >= count) {
-        return false; // out of range
+        return false;  // out of range
     }
 
     // newest entry is at (minorHead - 1)
@@ -112,13 +112,12 @@ bool getMinorByIndex(uint8_t index, uint8_t *node, uint32_t *code) {
     return true;
 }
 
-bool getMajorByIndex(uint8_t index, uint8_t *node, uint32_t *code) {
-    uint8_t count = (majorHead >= majorTail)
-                    ? (majorHead - majorTail)
-                    : (MAJOR_BUFFER_SIZE - majorTail + majorHead);
+bool GetMajorByIndex(uint8_t index, uint8_t* node, uint32_t* code) {
+    uint8_t count = (majorHead >= majorTail) ? (majorHead - majorTail)
+                                             : (MAJOR_BUFFER_SIZE - majorTail + majorHead);
 
     if (index >= count) {
-        return false; // out of range
+        return false;  // out of range
     }
 
     // newest entry is at (majorHead - 1)
@@ -134,62 +133,57 @@ bool getMajorByIndex(uint8_t index, uint8_t *node, uint32_t *code) {
 }
 
 // --- Handle an emergency when recieved ---
-void handleEMCY(const twai_message_t& rxMsg, uint8_t nodeID){
-  // if (rxMsg.data[0] == 0x01) minorEMCYCount += 1;
+void HandleEMCY(const twai_message_t& rxMsg, uint8_t nodeID) {
+    // if (rxMsg.data[0] == 0x01) minorEMCYCount += 1;
 
-  // Extract 32‑bit error code
-  uint32_t errorCode;
-  memcpy(&errorCode, &rxMsg.data[2], sizeof(uint32_t));
+    // Extract 32‑bit error code
+    uint32_t errorCode;
+    memcpy(&errorCode, &rxMsg.data[2], sizeof(uint32_t));
 
-  uint8_t priority = rxMsg.data[0];
+    uint8_t priority = rxMsg.data[0];
 
-  if (priority == 0x00) {
-      // Major EMCY received
-      pushMajor(nodeID, errorCode);
-      nodeOperatingMode = 0x02;   // Stop system
-  }
-  else if (priority == 0x01) {
-      // Minor EMCY received
-      pushMinor(nodeID, errorCode);
-  }
-
-}
-
-// --- Send emergency function --- 
-void sendEMCY(uint8_t priority, uint8_t nodeID, uint32_t errorCode){
-  // Log it first
-  if (priority == 0x00) {
-      pushMajor(nodeID, errorCode);
-  } else if (priority == 0x01) {
-      pushMinor(nodeID, errorCode);
-  }
-
-
-  twai_message_t txMsg;
-  txMsg.identifier = 0x080 + nodeID;
-  txMsg.data_length_code = 6;
-  txMsg.data[0] = priority;
-  txMsg.data[1] = nodeID;
-  memcpy(&txMsg.data[2], &errorCode, sizeof(uint32_t));
-
-
-  if (priority == 0x00) {
-    nodeOperatingMode = 0x02;  // Stop system
-  }
-
-  if (priority == 0x01) {
-    // minorEMCYCount += 1;
-    // if (minorEMCYCount >= MAX_MINOR_EMCY_COUNT) {
-    //   minorEMCYCount = 0;  // Reset to avoid infinite loop
-    //   sendEMCY(0x00, nodeID, 0x00000301);  // Major EMCY
-    //   return;
-    // }
-  }
-
-  if (twai_transmit(&txMsg, pdMS_TO_TICKS(100)) != ESP_OK) {
-    if (twai_transmit(&txMsg, pdMS_TO_TICKS(100)) != ESP_OK) {
-      Serial.println("EMCY transmission failed twice");
+    if (priority == 0x00) {
+        // Major EMCY received
+        PushMajor(nodeID, errorCode);
+        nodeOperatingMode = 0x04;  // Stop system
+    } else if (priority == 0x01) {
+        // Minor EMCY received
+        PushMinor(nodeID, errorCode);
     }
-  }
 }
 
+// --- Send emergency function ---
+void sendEMCY(uint8_t priority, uint8_t nodeID, uint32_t errorCode) {
+    // Log it first
+    if (priority == 0x00) {
+        PushMajor(nodeID, errorCode);
+    } else if (priority == 0x01) {
+        PushMinor(nodeID, errorCode);
+    }
+
+    twai_message_t txMsg;
+    txMsg.identifier = 0x080 + nodeID;
+    txMsg.data_length_code = 6;
+    txMsg.data[0] = priority;
+    txMsg.data[1] = nodeID;
+    memcpy(&txMsg.data[2], &errorCode, sizeof(uint32_t));
+
+    if (priority == 0x00) {
+        nodeOperatingMode = 0x04;  // Stop system
+    }
+
+    if (priority == 0x01) {
+        // minorEMCYCount += 1;
+        // if (minorEMCYCount >= MAX_MINOR_EMCY_COUNT) {
+        //   minorEMCYCount = 0;  // Reset to avoid infinite loop
+        //   sendEMCY(0x00, nodeID, 0x00000301);  // Major EMCY
+        //   return;
+        // }
+    }
+
+    if (twai_transmit(&txMsg, pdMS_TO_TICKS(100)) != ESP_OK) {
+        if (twai_transmit(&txMsg, pdMS_TO_TICKS(100)) != ESP_OK) {
+            Serial.println("EMCY transmission failed twice");
+        }
+    }
+}

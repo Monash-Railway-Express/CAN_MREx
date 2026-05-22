@@ -1,0 +1,18 @@
+# Preview what would change (doesn't edit files)
+clang-format --dry-run --Werror myfile.cpp
+
+# Actually fix a file
+clang-format -i myfile.cpp
+
+# Fix all files in directory
+Get-ChildItem -Recurse -Include *.cpp, *.h, *.ino | ForEach-Object {
+    clang-format -i $_.FullName
+}
+
+# Run on a single file
+clang-tidy myfile.cpp
+
+# Fix all files in directory
+Get-ChildItem -Recurse -Include *.cpp, *.h, *.ino | ForEach-Object {
+    clang-tidy -i $_.FullName
+}

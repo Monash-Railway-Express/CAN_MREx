@@ -13,14 +13,16 @@
 #ifndef CM_EMCY_H
 #define CM_EMCY_H
 
-bool checkMinorEMCY();
-bool checkMajorEMCY();
+#include <Arduino.h>
+#include <driver/twai.h>
 
-bool getMinorByIndex(uint8_t index, uint8_t *node, uint32_t *code);
-bool getMajorByIndex(uint8_t index, uint8_t *node, uint32_t *code);
+bool CheckMinorEMCY();
+bool CheckMajorEMCY();
 
-void handleEMCY(const twai_message_t& rxMsg, uint8_t nodeID);
+bool GetMinorByIndex(uint8_t index, uint8_t* node, uint32_t* code);
+bool GetMajorByIndex(uint8_t index, uint8_t* node, uint32_t* code);
+
+void HandleEMCY(const twai_message_t& rxMsg, uint8_t nodeID);
 void sendEMCY(uint8_t priority, uint8_t nodeID, uint32_t errorCode);
-
 
 #endif

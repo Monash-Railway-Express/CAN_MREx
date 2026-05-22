@@ -1,5 +1,5 @@
 /**
- * CAN MREX Template file 
+ * CAN MREX Template file
  *
  * File:            template.ino
  * Organisation:    MREX
@@ -10,81 +10,59 @@
  *
  */
 
-#include <CAN_MREx.h> // Inlcudes all CAN MREX files
+#include <CAN_MREx.h>  // Inlcudes all CAN MREX files
 
 // User code begin: ------------------------------------------------------
-//Includes
-
-
+// Includes
 
 // --- CAN MREx variables ---
-uint8_t nodeID = 3;  // Change this to set your device's node ID
-#define TX_GPIO_NUM GPIO_NUM_4 // Set GPIO pin for CAN Transmit
-#define RX_GPIO_NUM GPIO_NUM_5 // Set GPIO pins for CAN Receive
-
+uint8_t nodeID = 3;             // Change this to set your device's node ID
+#define TX_GPIO_NUM GPIO_NUM_4  // Set GPIO pin for CAN Transmit
+#define RX_GPIO_NUM GPIO_NUM_5  // Set GPIO pins for CAN Receive
 
 // --- Pin Definitions ---
 
-
-
 // --- OD definitions ---
-
-
 
 // User code end ---------------------------------------------------------
 
-
 void setup() {
-  Serial.begin(115200);
-  delay(1000);
-  Serial.println("Serial Coms started at 115200 baud");
+    Serial.begin(115200);
+    delay(1000);
+    Serial.println("Serial Coms started at 115200 baud");
 
-  //Initialize CANMREX protocol
-  initCANMREX(TX_GPIO_NUM, RX_GPIO_NUM, nodeID);
-  xTaskCreatePinnedToCore(
-      CAN_Task,
-      "CAN Task",
-      6144,
-      &nodeID,
-      3,
-      NULL,
-      0
-  );
-  
+    // Initialize CANMREX protocol
+    initCANMREX(TX_GPIO_NUM, RX_GPIO_NUM, nodeID);
+    xTaskCreatePinnedToCore(CAN_Task, "CAN Task", 6144, &nodeID, 3, NULL, 0);
 
-  // User code Setup Begin: -------------------------------------------------
-  // --- Register OD entries ---
+    // User code Setup Begin: -------------------------------------------------
+    // --- Register OD entries ---
 
+    // --- Register TPDOs ---
 
-  // --- Register TPDOs ---
+    // --- Register RPDOs ---
 
-
-  // --- Register RPDOs ---
-
-  
-  // User code Setup end ---------------------------------------------------------
+    // User code Setup end ---------------------------------------------------------
 }
 
-
 void loop() {
-  // //User Code begin loop() ----------------------------------------------------
-  
-  // --- Stopped mode (This is default starting point) ---
-  if (nodeOperatingMode == 0x02){ 
-    Serial.println("Stopped Mode");
-    
-  }
+    // //User Code begin loop() ----------------------------------------------------
 
-  // --- Pre operational state (This is where you can do checks and make sure that everything is okay) ---
-  if (nodeOperatingMode == 0x80){ 
-    Serial.println("Preop Mode");
-  }
+    // --- Stopped mode (This is default starting point) ---
+    if (nodeOperatingMode == 0x02) {
+        Serial.println("Stopped Mode");
+    }
 
-  // --- Operational state (Normal operating mode) ---
-  if (nodeOperatingMode == 0x01){ 
-    Serial.println("Normal Mode");
+    // --- Pre operational state (This is where you can do checks and make sure that everything is
+    // okay) ---
+    if (nodeOperatingMode == 0x80) {
+        Serial.println("Preop Mode");
+    }
 
-  }
+    // --- Operational state (Normal operating mode) ---
+    if (nodeOperatingMode == 0x01) {
+        Serial.println("Normal Mode");
+    }
 
-  //User code end loop() --------------------------------------------------------
+    // User code end loop() --------------------------------------------------------
 }

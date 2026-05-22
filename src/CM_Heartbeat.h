@@ -21,17 +21,16 @@ void enableHeartbeatMonitoring(bool enable);
 bool isHeartbeatMonitoringEnabled();
 
 typedef struct {
-  uint8_t hbOperatingMode;
-  uint32_t lastHeartbeat;
+    uint8_t hbOperatingMode;
+    uint32_t lastHeartbeat;
 } nodeHeartbeat;
 
 extern nodeHeartbeat heartbeatTable[MAX_NODES];
 const nodeHeartbeat* getHeartbeatTable();
 
-void sendHeartbeat(uint8_t nodeID);
-void receiveHeartbeat(const twai_message_t& rxMsg);
-void checkHeartbeatTimeouts();
-void setupHeartbeatConsumer();
-
+void _SendHeartbeat(uint8_t nodeID);
+void _ReceiveHeartbeat(const twai_message_t& rxMsg);
+void _CheckHeartbeatTimeouts();
+void _SetupHeartbeatConsumer();
 
 #endif
