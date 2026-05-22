@@ -1,5 +1,5 @@
 /**
- * CAN MREX Object Dictionary file 
+ * CAN MREX Object Dictionary file
  *
  * File:            CM_ObjectDictionary.h
  * Organisation:    MREX
@@ -10,8 +10,6 @@
  *
  */
 
- 
-
 #ifndef CM_OBJECT_DICTIONARY_H
 #define CM_OBJECT_DICTIONARY_H
 
@@ -21,11 +19,11 @@ extern volatile uint8_t nodeOperatingMode;  // set operating mode to 0x02 initia
 extern uint32_t heartbeatInterval;
 
 typedef struct {
-  uint16_t index;
-  uint8_t subindex;
-  uint8_t access; // 0 = RO, 1 = WO, 2 = RW
-  uint8_t size;   // in bytes
-  void* dataPtr;
+    uint16_t index;
+    uint8_t subindex;
+    uint8_t access;  // 0 = RO, 1 = WO, 2 = RW
+    uint8_t size;    // in bytes
+    void* dataPtr;
 } ODEntry;
 
 ODEntry* findODEntry(uint16_t index, uint8_t subindex);

@@ -76,7 +76,7 @@ The index is in order from 0 being the newest message to max buffer - 1.
 ## [1.12.0] - 2026-1-13
 ### Changed
 - The libary should now be added from the library manager rather than downloading and putting into your workspace
-- The #include header has changed from #include <CM.h> to #include can_mrex.h
+- The #include header has changed from #include <CM.h> to #include CAN_MREx.h
 
 ---
 
