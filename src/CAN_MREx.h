@@ -1,13 +1,20 @@
 /**
- * CAN MREX Combined headers file
+ * @file CAN_MREx.cpp
+ * @brief CAN MREx entry point
  *
- * File:            CAN_MREx.h
- * Organisation:    MREX
- * Author:          Chiara Gillam
- * Date Created:    13/09/2025
- * Last Modified:   10/03/2026
- * Version:         1.13.0
+ * @details
+ * This file includes the task that gets pinned to a core that runs CAN MREx.
  *
+ * @author Chiara Gillam
+ *
+ * @date_created     13/09/2025
+ * @date_modified    22/05/2026
+ *
+ * @version 1.13.1
+ *
+ * @organisation MREX
+ *
+ * @see CAN_MREx.cpp
  */
 
 #ifndef CAN_MREX_H
@@ -24,6 +31,13 @@
 #include "CM_PDO.h"
 #include "CM_SDO.h"
 
+/**
+ * @brief Function that runs all CAN related tasks
+ *
+ * @param pvParameters  Pointer to the node ID (uint8_t) passed from task creation
+ *
+ * @return void
+ */
 void CAN_Task(void* pvParameters);
 
 #endif

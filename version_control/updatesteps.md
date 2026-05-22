@@ -1,4 +1,4 @@
-# **What you must do for every new Arduino library release**
+**What you must do for every new Arduino library release**
 ---
 
 ## **1. Update `library.properties`**

@@ -1,13 +1,20 @@
 /**
- * CAN MREX CAN_MREx.cpp file
+ * @file CAN_MREx.cpp
+ * @brief CAN MREx entry point
  *
- * File:            CM.cpp
- * Organisation:    MREX
- * Author:          Chiara Gillam
- * Date Created:    12/01/2026
- * Last Modified:   14/03/2026
- * Version:         1.13.0
+ * @details
+ * This file includes the task that gets pinned to a core that runs CAN MREx.
  *
+ * @author Chiara Gillam
+ *
+ * @date_created     13/09/2025
+ * @date_modified    22/05/2026
+ *
+ * @version 1.13.1
+ *
+ * @organisation MREX
+ *
+ * @see CAN_MREx.h
  */
 
 #include "CAN_MREx.h"
@@ -16,7 +23,7 @@ void CAN_Task(void* pvParameters) {
     uint8_t nodeID = *(uint8_t*)pvParameters;
 
     while (true) {
-        HandleCAN(nodeID, nullptr);
+        HandleCAN(nodeID);
         vTaskDelay(1);  // yield to scheduler
     }
 }

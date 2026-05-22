@@ -13,6 +13,9 @@
 #ifndef CM_SDO_H
 #define CM_SDO_H
 
+#include <Arduino.h>
+#include <driver/twai.h>
+
 extern volatile bool sdoResponseReady;
 extern twai_message_t sdoResponse;
 
